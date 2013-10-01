@@ -1,0 +1,21 @@
+<?php
+
+namespace VrtakCZ\Newrelic;
+
+use Nette\Application\Application;
+
+class OnErrorCallback extends \Nette\Object
+{
+	/**
+	 * @param \Nette\Application\Application
+	 * @param \Exception
+	 */
+	public function __invoke(Application $application, \Exception $e)
+	{
+		if ($e instanceof \Nette\Application\BadRequestException) { // skip 4xx errors
+			return;
+		}
+
+		newrelic_notice_error($e->getMessage(), $e);
+	}
+}

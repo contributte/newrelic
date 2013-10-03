@@ -4,7 +4,7 @@ namespace VrtakCZ\NewRelic;
 
 use Nette\Config\Configurator;
 use Nette\Config\Compiler;
-use Nette\Diagnostics\Debugger;
+use Nette\Utils\PhpGenerator\ClassType;
 
 class Extension extends \Nette\Config\CompilerExtension
 {
@@ -14,25 +14,38 @@ class Extension extends \Nette\Config\CompilerExtension
 			throw new \InvalidStateException('NewRelic extension is not loaded');
 		}
 
-		$this->setupLogger();
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
 	}
 
-	private function setupLogger()
+	public function afterCompile(ClassType $class)
 	{
+		parent::afterCompile($class);
+
 		$config = $this->getConfig();
+		$initialize = $class->methods['initialize'];
 
 		if (isset($config['appName'])) {
-			if (isset($config['license'])) {
-				newrelic_set_appname($config['appName'], $config['license']);
-			} else {
-				newrelic_set_appname($config['appName']);
-			}
+			$initialize->addBody(sprintf('\\%s::setupAppName(?, ?);', get_called_class()), array(
+				$config['appName'], isset($config['license']) ? $config['license'] : NULL
+			));
 		}
 
-		$logger = new Logger;
-		Debugger::$logger = $logger;
+		$initialize->addBody(sprintf('$newRelicLogger = new \\%s\\Logger;', __NAMESPACE__));
+		$initialize->addBody('\\Nette\\Diagnostics\\Debugger::$logger = $newRelicLogger;');
+	}
+
+	/**
+	 * @param string
+	 * @param string|NULL
+	 */
+	public static function setupAppName($appName, $license = NULL)
+	{
+		if ($license === NULL) {
+			newrelic_set_appname($appName);
+		} else {
+			newrelic_set_appname($appName, $license);
+		}
 	}
 
 	private function setupApplicationOnRequest()

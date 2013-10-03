@@ -27,6 +27,39 @@ newrelic:
 		paramName: paramValue
 ```
 
+Realtime User Monitoring
+------------------------
+
+add this component factory to your base presenter
+
+```php
+protected function createComponentNewRelicHeader()
+{
+	$control = new \VrtakCZ\NewRelic\RUM\HeaderControl;
+	$control->disableScriptTag(); // optionall
+	return $control;
+}
+
+protected function createComponentNewRelicFooter()
+{
+	$control = new \VrtakCZ\NewRelic\RUM\FooterControl;
+	$control->disableScriptTag(); // optionall
+	return $control;
+}
+```
+
+and add this to your `@layout` header (before `</head>`)
+
+```smarty
+{control newRelicHeader}
+```
+
+and add this to your `@layout` footer (before `</body>`)
+
+```smarty
+{control newRelicFooter}
+```
+
 License
 -------
 NewRelic Nette is licensed under the MIT License - see the LICENSE file for details

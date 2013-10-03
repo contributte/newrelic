@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\Newrelic;
+namespace VrtakCZ\NewRelic;
 
 use Nette\Config\Configurator;
 use Nette\Config\Compiler;

@@ -12,7 +12,7 @@ edit `app/bootstrap.php`
 
 ```php
 // add this line after `$configurator = new Nette\Config\Configurator;`
-\VrtakCZ\Newrelic\Extension::register($configurator);
+\VrtakCZ\NewRelic\Extension::register($configurator);
 ```
 
 Config

@@ -16,6 +16,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
+		$this->setupParameters();
 	}
 
 	public function afterCompile(ClassType $class)
@@ -69,6 +70,28 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder->addDefinition($this->prefix('onErrorCallback'))
 			->setClass('VrtakCZ\Newrelic\OnErrorCallback')
 			->addSetup('register', array('@\Nette\Application\Application'));
+	}
+
+	private function setupParameters()
+	{
+		$config = $this->getConfig();
+		$builder = $this->getContainerBuilder();
+
+		if (isset($config['parameters'])) {
+			if (!is_array($config['parameters'])) {
+				throw new \InvalidStateException('Invalid parameters structure');
+			}
+			if (count($config['parameters']) < 1) {
+				return;
+			}
+
+			$parameters = $builder->addDefinition($this->prefix('parameters'))
+				->setClass('VrtakCZ\Newrelic\Parameters')
+				->addTag('run', true);
+			foreach ($config['parameters'] as $name => $value) {
+				$parameters->addSetup('setParameter', array($name, $value));
+			}
+		}
 	}
 
 	/**

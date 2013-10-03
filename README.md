@@ -23,6 +23,8 @@ newrelic:
 	appName: YourApplicationName #optional
 	license: yourLicenseCode #optional
 	actionKey: action # default - optional - action parameter name
+	parameters: #optional
+		paramName: paramValue
 ```
 
 License

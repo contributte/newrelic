@@ -8,8 +8,33 @@ use Nette\Utils\PhpGenerator\ClassType;
 
 class Extension extends \Nette\Config\CompilerExtension
 {
+	/** @var bool */
+	private $skipIfIsDisabled;
+	/** @var bool */
+	private $disabled = FALSE;
+
+	/**
+	 * @param bool
+	 */
+	public function __construct($skipIfIsDisabled = FALSE)
+	{
+		$this->skipIfIsDisabled = $skipIfIsDisabled;
+	}
+
 	public function loadConfiguration()
 	{
+		$config = $this->getConfig();
+		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !ini_get('newrelic.enabled'))) {
+			$this->disabled = TRUE;
+			return;
+		}
+
+		if (isset($config['disable']) && $config['disable']) {
+			@ini_set('newrelic.enabled', false);
+			$this->disabled = TRUE;
+			return;
+		}
+
 		if (!extension_loaded('newrelic')) {
 			throw new \InvalidStateException('NewRelic extension is not loaded');
 		} elseif (!ini_get('newrelic.enabled')) {
@@ -19,11 +44,14 @@ class Extension extends \Nette\Config\CompilerExtension
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
 		$this->setupParameters();
+		$this->setupComponents();
 	}
 
 	public function afterCompile(ClassType $class)
 	{
-		parent::afterCompile($class);
+		if ($this->disabled) {
+			return;
+		}
 
 		$config = $this->getConfig();
 		$initialize = $class->methods['initialize'];
@@ -96,6 +124,17 @@ class Extension extends \Nette\Config\CompilerExtension
 				$parameters->addSetup('setParameter', array($name, $value));
 			}
 		}
+	}
+
+	private function setupComponents()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->addDefinition($this->prefix('headerControl'))
+			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($this->disabled));
+
+		$builder->addDefinition($this->prefix('footerControl'))
+			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($this->disabled));
 	}
 
 	/**

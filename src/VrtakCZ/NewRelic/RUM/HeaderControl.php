@@ -5,7 +5,18 @@ namespace VrtakCZ\NewRelic\RUM;
 class HeaderControl extends \Nette\Application\UI\Control
 {
 	/** @var bool */
+	private $disabled;
+	/** @var bool */
 	private $withScriptTag = TRUE;
+
+	/**
+	 * @param bool
+	 */
+	public function __construct($disabled = FALSE)
+	{
+		parent::__construct();
+		$this->disabled = $disabled;
+	}
 
 	/**
 	 * @return HeaderControl
@@ -18,6 +29,8 @@ class HeaderControl extends \Nette\Application\UI\Control
 
 	public function render()
 	{
-		echo newrelic_get_browser_timing_header($this->withScriptTag);
+		if (!$this->disabled) {
+			echo newrelic_get_browser_timing_header($this->withScriptTag);
+		}
 	}
 }

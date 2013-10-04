@@ -25,6 +25,7 @@ newrelic:
 	actionKey: action # default - optional - action parameter name
 	parameters: #optional
 		paramName: paramValue
+	disable: YES #optional - force disable
 ```
 
 Realtime User Monitoring
@@ -35,14 +36,14 @@ add this component factory to your base presenter
 ```php
 protected function createComponentNewRelicHeader()
 {
-	$control = new \VrtakCZ\NewRelic\RUM\HeaderControl;
+	$control = $this->context->newrelic->headerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }
 
 protected function createComponentNewRelicFooter()
 {
-	$control = new \VrtakCZ\NewRelic\RUM\FooterControl;
+	$control = $this->context->newrelic->footerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }

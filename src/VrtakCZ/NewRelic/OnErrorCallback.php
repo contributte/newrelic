@@ -18,4 +18,12 @@ class OnErrorCallback extends \Nette\Object
 
 		newrelic_notice_error($e->getMessage(), $e);
 	}
+
+	/**
+	 * @param \Nette\Application\Application
+	 */
+	public function register(Application $application)
+	{
+		$application->onError[] = $this;
+	}
 }

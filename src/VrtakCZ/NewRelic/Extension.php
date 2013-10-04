@@ -57,7 +57,8 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig();
 
 		$onRequestCallback = $builder->addDefinition($this->prefix('onRequestCallback'))
-			->addSetup('register', array('@\Nette\Application\Application'));
+			->addSetup('register', array('@\Nette\Application\Application'))
+			->addTag('run', true);
 		if (isset($config['actionKey'])) {
 			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array($config['actionKey']));
 		} else {
@@ -71,7 +72,8 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
 			->setClass('VrtakCZ\NewRelic\OnErrorCallback')
-			->addSetup('register', array('@\Nette\Application\Application'));
+			->addSetup('register', array('@\Nette\Application\Application'))
+			->addTag('run', true);
 	}
 
 	private function setupParameters()

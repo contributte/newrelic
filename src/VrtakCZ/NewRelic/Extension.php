@@ -59,9 +59,9 @@ class Extension extends \Nette\Config\CompilerExtension
 		$onRequestCallback = $builder->addDefinition($this->prefix('onRequestCallback'))
 			->addSetup('register', array('@\Nette\Application\Application'));
 		if (isset($config['actionKey'])) {
-			$onRequestCallback->setClass('VrtakCZ\Newrelic\OnRequestCallback', array($config['actionKey']));
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array($config['actionKey']));
 		} else {
-			$onRequestCallback->setClass('VrtakCZ\Newrelic\OnRequestCallback');
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback');
 		}
 	}
 
@@ -70,7 +70,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass('VrtakCZ\Newrelic\OnErrorCallback')
+			->setClass('VrtakCZ\NewRelic\OnErrorCallback')
 			->addSetup('register', array('@\Nette\Application\Application'));
 	}
 
@@ -88,7 +88,7 @@ class Extension extends \Nette\Config\CompilerExtension
 			}
 
 			$parameters = $builder->addDefinition($this->prefix('parameters'))
-				->setClass('VrtakCZ\Newrelic\Parameters')
+				->setClass('VrtakCZ\NewRelic\Parameters')
 				->addTag('run', true);
 			foreach ($config['parameters'] as $name => $value) {
 				$parameters->addSetup('setParameter', array($name, $value));

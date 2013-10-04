@@ -12,6 +12,8 @@ class Extension extends \Nette\Config\CompilerExtension
 	{
 		if (!extension_loaded('newrelic')) {
 			throw new \InvalidStateException('NewRelic extension is not loaded');
+		} elseif (!ini_get('newrelic.enabled')) {
+			throw new \InvalidStateException('NewRelic is not enabled');
 		}
 
 		$this->setupApplicationOnRequest();

@@ -26,12 +26,15 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig();
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !ini_get('newrelic.enabled'))) {
 			$this->disabled = TRUE;
-			return;
 		}
 
 		if (isset($config['disable']) && $config['disable']) {
-			@ini_set('newrelic.enabled', false);
 			$this->disabled = TRUE;
+		}
+
+		$this->setupComponents();
+
+		if ($this->disabled) {
 			return;
 		}
 
@@ -44,7 +47,6 @@ class Extension extends \Nette\Config\CompilerExtension
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
 		$this->setupParameters();
-		$this->setupComponents();
 	}
 
 	public function afterCompile(ClassType $class)

@@ -15,6 +15,10 @@ class Extension extends \Nette\Config\CompilerExtension
 
 	/** @var array */
 	public $defaults = array(
+		'logLevel' => array(
+			\Nette\Diagnostics\Logger::ERROR,
+			\Nette\Diagnostics\Logger::CRITICAL,
+		),
 		'rum' => array(
 			'autoEnable' => TRUE,
 		),
@@ -90,7 +94,9 @@ class Extension extends \Nette\Config\CompilerExtension
 		}
 
 		// Logger
-		$initialize->addBody('$newRelicLogger = new \VrtakCZ\NewRelic\Logger;');
+		$initialize->addBody('$newRelicLogger = new \VrtakCZ\NewRelic\Logger(?);', array(
+			array_unique($config['logLevel'])
+		));
 		$initialize->addBody('\Nette\Diagnostics\Debugger::$logger = $newRelicLogger;');
 
 		// Options

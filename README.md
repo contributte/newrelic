@@ -24,6 +24,9 @@ newrelic:
 	license: yourLicenseCode #optional
 	disable: YES #optional - force disable
 	actionKey: action # default - optional - action parameter name
+	logLevel: #defaults
+		- critical
+		- error
 
 	# optional options with default values
 	rum:

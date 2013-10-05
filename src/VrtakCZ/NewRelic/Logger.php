@@ -6,13 +6,21 @@ use Nette\Diagnostics\Debugger;
 
 class Logger extends \Nette\Diagnostics\Logger
 {
-	public function __construct()
+	/** @var array */
+	private $logLevel;
+
+	/**
+	 * @param array
+	 */
+	public function __construct(array $logLevel)
 	{
 		$oldLogger = Debugger::$logger;
 		static::$emailSnooze =& $oldLogger::$emailSnooze;
 		$this->mailer =& $oldLogger->mailer;
 		$this->directory =& $oldLogger->directory;
 		$this->email =& $oldLogger->email;
+
+		$this->logLevel = $logLevel;
 	}
 
 	/**
@@ -24,7 +32,7 @@ class Logger extends \Nette\Diagnostics\Logger
 	{
 		$res = parent::log($message, $priority);
 
-		if (in_array($priority, array(self::ERROR, self::CRITICAL))) {
+		if (in_array($priority, $this->logLevel)) {
 			if (is_array($message)) {
 				$message = implode(' ', $message);
 			}

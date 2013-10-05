@@ -84,14 +84,14 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		// AppName and license
 		if (isset($config['appName'])) {
-			$initialize->addBody(sprintf('\\%s::setupAppName(?, ?);', get_called_class()), array(
+			$initialize->addBody('\VrtakCZ\NewRelic\Extension::setupAppName(?, ?);', array(
 				$config['appName'], isset($config['license']) ? $config['license'] : NULL
 			));
 		}
 
 		// Logger
-		$initialize->addBody(sprintf('$newRelicLogger = new \\%s\\Logger;', __NAMESPACE__));
-		$initialize->addBody('\\Nette\\Diagnostics\\Debugger::$logger = $newRelicLogger;');
+		$initialize->addBody('$newRelicLogger = new \VrtakCZ\NewRelic\Logger;');
+		$initialize->addBody('\Nette\Diagnostics\Debugger::$logger = $newRelicLogger;');
 
 		// Options
 		if ($config['rum']['autoEnable']) {
@@ -124,7 +124,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", array(
 			$config['errorCollector']['recordDatabaseErrors'],
 		));
-		$initialize->addBody("ini_set('newrelic.capture_params', ?);", array(
+		$initialize->addBody("newrelic_capture_params(?);", array(
 			$config['parameters']['capture'],
 		));
 		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(

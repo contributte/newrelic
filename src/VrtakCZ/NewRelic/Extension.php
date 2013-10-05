@@ -60,7 +60,7 @@ class Extension extends \Nette\Config\CompilerExtension
 			$this->disabled = TRUE;
 		}
 
-		$this->setupComponents();
+		$this->setupRUM();
 
 		if ($this->disabled) {
 			return;
@@ -198,14 +198,17 @@ class Extension extends \Nette\Config\CompilerExtension
 		}
 	}
 
-	private function setupComponents()
+	private function setupRUM()
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('headerControl'))
+		$builder->addDefinition($this->prefix('rum.user'))
+			->setClass('VrtakCZ\NewRelic\RUM\User', array($this->disabled));
+
+		$builder->addDefinition($this->prefix('rum.headerControl'))
 			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($this->disabled));
 
-		$builder->addDefinition($this->prefix('footerControl'))
+		$builder->addDefinition($this->prefix('rum.footerControl'))
 			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($this->disabled));
 	}
 

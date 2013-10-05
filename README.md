@@ -57,14 +57,14 @@ add this component factory to your base presenter
 ```php
 protected function createComponentNewRelicHeader()
 {
-	$control = $this->context->newrelic->headerControl;
+	$control = $this->context->newrelic->rum->headerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }
 
 protected function createComponentNewRelicFooter()
 {
-	$control = $this->context->newrelic->footerControl;
+	$control = $this->context->newrelic->rum->footerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }

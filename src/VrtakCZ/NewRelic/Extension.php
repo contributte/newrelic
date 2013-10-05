@@ -61,6 +61,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		}
 
 		$this->setupRUM();
+		$this->setupCustomParameters();
 
 		if ($this->disabled) {
 			return;
@@ -74,7 +75,6 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
-		$this->setupParameters();
 	}
 
 	public function afterCompile(ClassType $class)
@@ -176,24 +176,22 @@ class Extension extends \Nette\Config\CompilerExtension
 			->addTag('run', true);
 	}
 
-	private function setupParameters()
+	private function setupCustomParameters()
 	{
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		if (isset($config['parameters']['args'])) {
-			if (!is_array($config['parameters']['args'])) {
-				throw new \InvalidStateException('Invalid parameters structure');
-			}
-			if (count($config['parameters']['args']) < 1) {
-				return;
+		$customParameters = $builder->addDefinition($this->prefix('customParameters'))
+			->setClass('VrtakCZ\NewRelic\CustomParameters')
+			->addTag('run', true);
+
+		if (isset($config['customParameters'])) {
+			if (!is_array($config['customParameters'])) {
+				throw new \InvalidStateException('Invalid custom parameters structure');
 			}
 
-			$parameters = $builder->addDefinition($this->prefix('parameters'))
-				->setClass('VrtakCZ\NewRelic\Parameters')
-				->addTag('run', true);
-			foreach ($config['parameters']['args'] as $name => $value) {
-				$parameters->addSetup('setParameter', array($name, $value));
+			foreach ($config['customParameters'] as $name => $value) {
+				$customParameters->addSetup('addParameter', array($name, $value));
 			}
 		}
 	}

@@ -45,8 +45,8 @@ newrelic:
 	parameters:
 		capture: No
 		ignored: ''
-		args:
-			paramName: paramValue
+	customParameters:
+		paramName: paramValue
 ```
 
 Realtime User Monitoring

@@ -221,6 +221,9 @@ class Extension extends \Nette\Config\CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
+		$builder->addDefinition($this->prefix('rum'))
+			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));
+
 		$builder->addDefinition($this->prefix('rum.user'))
 			->setClass('VrtakCZ\NewRelic\RUM\User', array($this->disabled));
 

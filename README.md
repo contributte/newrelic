@@ -30,7 +30,7 @@ newrelic:
 
 	# optional options with default values
 	rum:
-		autoEnable: Yes
+		autoEnabled: Yes
 	transactionTracer:
 		enabled: Yes
 		detail: 1
@@ -44,7 +44,7 @@ newrelic:
 		recordDatabaseErrors: Yes
 	parameters:
 		capture: No
-		ignored: ''
+		ignored: []
 	customParameters:
 		paramName: paramValue
 ```

@@ -11,7 +11,7 @@ class Extension extends \Nette\Config\CompilerExtension
 	/** @var bool */
 	private $skipIfIsDisabled;
 	/** @var bool */
-	private $enabled = FALSE;
+	private $enabled = TRUE;
 
 	/** @var array */
 	public $defaults = array(

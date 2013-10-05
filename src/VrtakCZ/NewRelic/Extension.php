@@ -11,7 +11,7 @@ class Extension extends \Nette\Config\CompilerExtension
 	/** @var bool */
 	private $skipIfIsDisabled;
 	/** @var bool */
-	private $disabled = FALSE;
+	private $enabled = FALSE;
 
 	/** @var array */
 	public $defaults = array(
@@ -53,18 +53,18 @@ class Extension extends \Nette\Config\CompilerExtension
 	{
 		$config = $this->getConfig();
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !ini_get('newrelic.enabled'))) {
-			$this->disabled = TRUE;
+			$this->enabled = FALSE;
 		}
 
-		if (isset($config['disable']) && $config['disable']) {
-			$this->disabled = TRUE;
+		if (isset($config['enabled']) && !$config['enabled']) {
+			$this->enabled = FALSE;
 		}
 
 		$this->setupRUM();
 		$this->setupCustomParameters();
 		$this->setupCustomTracer();
 
-		if ($this->disabled) {
+		if (!$this->enabled) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 	public function afterCompile(ClassType $class)
 	{
-		if ($this->disabled) {
+		if (!$this->enabled) {
 			return;
 		}
 
@@ -225,13 +225,13 @@ class Extension extends \Nette\Config\CompilerExtension
 			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setClass('VrtakCZ\NewRelic\RUM\User', array($this->disabled));
+			->setClass('VrtakCZ\NewRelic\RUM\User', array($this->enabled));
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($this->disabled));
+			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($this->enabled));
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($this->disabled));
+			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($this->enabled));
 	}
 
 	/**

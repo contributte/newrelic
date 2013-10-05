@@ -5,17 +5,17 @@ namespace VrtakCZ\NewRelic\RUM;
 class FooterControl extends \Nette\Application\UI\Control
 {
 	/** @var bool */
-	private $disabled;
+	private $enabled;
 	/** @var bool */
 	private $withScriptTag = TRUE;
 
 	/**
 	 * @param bool
 	 */
-	public function __construct($disabled = FALSE)
+	public function __construct($enabled = TRUE)
 	{
 		parent::__construct();
-		$this->disabled = $disabled;
+		$this->enabled = $enabled;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class FooterControl extends \Nette\Application\UI\Control
 
 	public function render()
 	{
-		if (!$this->disabled) {
+		if ($this->enabled) {
 			echo newrelic_get_browser_timing_footer($this->withScriptTag);
 		}
 	}

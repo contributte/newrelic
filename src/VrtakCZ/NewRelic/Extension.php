@@ -20,7 +20,7 @@ class Extension extends \Nette\Config\CompilerExtension
 			\Nette\Diagnostics\Logger::CRITICAL,
 		),
 		'rum' => array(
-			'autoEnable' => TRUE,
+			'autoEnabled' => TRUE,
 		),
 		'transactionTracer' => array(
 			'enabled' => TRUE,
@@ -37,7 +37,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		),
 		'parameters' => array(
 			'capture' => FALSE,
-			'ignored' => '',
+			'ignored' => array(),
 		),
 	);
 
@@ -101,7 +101,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$initialize->addBody('\Nette\Diagnostics\Debugger::$logger = $newRelicLogger;');
 
 		// Options
-		if ($config['rum']['autoEnable']) {
+		if (!$config['rum']['autoEnabled']) {
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", array(
@@ -135,7 +135,7 @@ class Extension extends \Nette\Config\CompilerExtension
 			$config['parameters']['capture'],
 		));
 		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(
-			(string) $config['parameters']['ignored'],
+			implode(',', $config['parameters']['ignored']),
 		));
 	}
 

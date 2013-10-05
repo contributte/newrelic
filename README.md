@@ -20,9 +20,9 @@ Config
 
 ```yaml
 newrelic:
+	enabled: Yes #default
 	appName: YourApplicationName #optional
 	license: yourLicenseCode #optional
-	disable: YES #optional - force disable
 	actionKey: action # default - optional - action parameter name
 	logLevel: #defaults
 		- critical

@@ -5,15 +5,15 @@ namespace VrtakCZ\NewRelic\RUM;
 class User extends \Nette\Object
 {
 	/** @var bool */
-	private $disabled;
+	private $enabled;
 
 	/**
 	 * @param bool
 	 */
-	public function __construct($disabled = FALSE)
+	public function __construct($enabled = TRUE)
 	{
 		parent::__construct();
-		$this->disabled = $disabled;
+		$this->enabled = $enabled;
 	}
 
 	/**
@@ -24,7 +24,7 @@ class User extends \Nette\Object
 	 */
 	public function setAttributes($user, $account, $product)
 	{
-		if (!$this->disabled) {
+		if ($this->enabled) {
 			newrelic_set_user_attributes($user, $account, $product);
 		}
 		return $this;

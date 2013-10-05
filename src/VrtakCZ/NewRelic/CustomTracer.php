@@ -5,14 +5,14 @@ namespace VrtakCZ\NewRelic;
 class CustomTracer extends \Nette\Object
 {
 	/** @var bool */
-	private $disabled;
+	private $enabled;
 
 	/**
 	 * @param bool
 	 */
-	public function __construct($disabled = FALSE)
+	public function __construct($enabled = TRUE)
 	{
-		$this->disabled = $disabled;
+		$this->enabled = $enabled;
 	}
 
 	/**
@@ -22,7 +22,7 @@ class CustomTracer extends \Nette\Object
 	 */
 	public function addTracer($function)
 	{
-		if (!$this->disabled) {
+		if ($this->enabled) {
 			newrelic_add_custom_tracer($function);
 		}
 		return $this;

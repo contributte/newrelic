@@ -105,37 +105,37 @@ class Extension extends \Nette\Config\CompilerExtension
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", array(
-			$config['transactionTracer']['enabled'],
+			(string) $config['transactionTracer']['enabled'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", array(
-			$config['transactionTracer']['detail'],
+			(string) $config['transactionTracer']['detail'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", array(
-			$config['transactionTracer']['recordSql'],
+			(string) $config['transactionTracer']['recordSql'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", array(
-			$config['transactionTracer']['slowSql'],
+			(string) $config['transactionTracer']['slowSql'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", array(
-			$config['transactionTracer']['threshold'],
+			(string) $config['transactionTracer']['threshold'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", array(
-			$config['transactionTracer']['stackTraceThreshold'],
+			(string) $config['transactionTracer']['stackTraceThreshold'],
 		));
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", array(
-			$config['transactionTracer']['explainThreshold'],
+			(string) $config['transactionTracer']['explainThreshold'],
 		));
 		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", array(
-			$config['errorCollector']['enabled'],
+			(string) $config['errorCollector']['enabled'],
 		));
 		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", array(
-			$config['errorCollector']['recordDatabaseErrors'],
+			(string) $config['errorCollector']['recordDatabaseErrors'],
 		));
 		$initialize->addBody("newrelic_capture_params(?);", array(
 			$config['parameters']['capture'],
 		));
 		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(
-			$config['parameters']['ignored'],
+			(string) $config['parameters']['ignored'],
 		));
 	}
 

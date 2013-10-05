@@ -111,18 +111,18 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		if (isset($config['parameters'])) {
-			if (!is_array($config['parameters'])) {
+		if (isset($config['parameters']['args'])) {
+			if (!is_array($config['parameters']['args'])) {
 				throw new \InvalidStateException('Invalid parameters structure');
 			}
-			if (count($config['parameters']) < 1) {
+			if (count($config['parameters']['args']) < 1) {
 				return;
 			}
 
 			$parameters = $builder->addDefinition($this->prefix('parameters'))
 				->setClass('VrtakCZ\NewRelic\Parameters')
 				->addTag('run', true);
-			foreach ($config['parameters'] as $name => $value) {
+			foreach ($config['parameters']['args'] as $name => $value) {
 				$parameters->addSetup('setParameter', array($name, $value));
 			}
 		}

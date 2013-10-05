@@ -22,10 +22,11 @@ Config
 newrelic:
 	appName: YourApplicationName #optional
 	license: yourLicenseCode #optional
+	disable: YES #optional - force disable
 	actionKey: action # default - optional - action parameter name
 	parameters: #optional
-		paramName: paramValue
-	disable: YES #optional - force disable
+		args:
+			paramName: paramValue
 ```
 
 Realtime User Monitoring

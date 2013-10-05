@@ -62,6 +62,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$this->setupRUM();
 		$this->setupCustomParameters();
+		$this->setupCustomTracer();
 
 		if ($this->disabled) {
 			return;
@@ -192,6 +193,26 @@ class Extension extends \Nette\Config\CompilerExtension
 
 			foreach ($config['customParameters'] as $name => $value) {
 				$customParameters->addSetup('addParameter', array($name, $value));
+			}
+		}
+	}
+
+	private function setupCustomTracer()
+	{
+		$config = $this->getConfig();
+		$builder = $this->getContainerBuilder();
+
+		$customTracer = $builder->addDefinition($this->prefix('customTracer'))
+			->setClass('VrtakCZ\NewRelic\CustomTracer')
+			->addTag('run', true);
+
+		if (isset($config['customTracer'])) {
+			if (!is_array($config['customTracer'])) {
+				throw new \InvalidStateException('Invalid custom tracer structure');
+			}
+
+			foreach ($config['customTracer'] as $function) {
+				$customTracer->addSetup('addTracer', array($function));
 			}
 		}
 	}

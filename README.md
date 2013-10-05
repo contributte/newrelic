@@ -24,7 +24,24 @@ newrelic:
 	license: yourLicenseCode #optional
 	disable: YES #optional - force disable
 	actionKey: action # default - optional - action parameter name
-	parameters: #optional
+
+	# optional options with default values
+	rum:
+		autoEnable: Yes
+	transactionTracer:
+		enabled: Yes
+		detail: 1
+		recordSql: obfuscated
+		slowSql: Yes
+		threshold: apdex_f
+		stackTraceThreshold: 500
+		explainThreshold: 500
+	errorCollector:
+		enabled: Yes
+		recordDatabaseErrors: Yes
+	parameters:
+		capture: No
+		ignored: ''
 		args:
 			paramName: paramValue
 ```

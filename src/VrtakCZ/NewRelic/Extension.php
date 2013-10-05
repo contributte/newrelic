@@ -13,6 +13,30 @@ class Extension extends \Nette\Config\CompilerExtension
 	/** @var bool */
 	private $disabled = FALSE;
 
+	/** @var array */
+	public $defaults = array(
+		'rum' => array(
+			'autoEnable' => TRUE,
+		),
+		'transactionTracer' => array(
+			'enabled' => TRUE,
+			'detail' => 1,
+			'recordSql' => 'obfuscated',
+			'slowSql' => TRUE,
+			'threshold' => 'apdex_f',
+			'stackTraceThreshold' => 500,
+			'explainThreshold' => 500,
+		),
+		'errorCollector' => array(
+			'enabled' => TRUE,
+			'recordDatabaseErrors' => TRUE,
+		),
+		'parameters' => array(
+			'capture' => FALSE,
+			'ignored' => '',
+		),
+	);
+
 	/**
 	 * @param bool
 	 */
@@ -55,17 +79,57 @@ class Extension extends \Nette\Config\CompilerExtension
 			return;
 		}
 
-		$config = $this->getConfig();
+		$config = $this->getConfig($this->defaults);
 		$initialize = $class->methods['initialize'];
 
+		// AppName and license
 		if (isset($config['appName'])) {
 			$initialize->addBody(sprintf('\\%s::setupAppName(?, ?);', get_called_class()), array(
 				$config['appName'], isset($config['license']) ? $config['license'] : NULL
 			));
 		}
 
+		// Logger
 		$initialize->addBody(sprintf('$newRelicLogger = new \\%s\\Logger;', __NAMESPACE__));
 		$initialize->addBody('\\Nette\\Diagnostics\\Debugger::$logger = $newRelicLogger;');
+
+		// Options
+		if ($config['rum']['autoEnable']) {
+			$initialize->addBody('newrelic_disable_autorum();');
+		}
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", array(
+			$config['transactionTracer']['enabled'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", array(
+			$config['transactionTracer']['detail'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", array(
+			$config['transactionTracer']['recordSql'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", array(
+			$config['transactionTracer']['slowSql'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", array(
+			$config['transactionTracer']['threshold'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", array(
+			$config['transactionTracer']['stackTraceThreshold'],
+		));
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", array(
+			$config['transactionTracer']['explainThreshold'],
+		));
+		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", array(
+			$config['errorCollector']['enabled'],
+		));
+		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", array(
+			$config['errorCollector']['recordDatabaseErrors'],
+		));
+		$initialize->addBody("ini_set('newrelic.capture_params', ?);", array(
+			$config['parameters']['capture'],
+		));
+		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(
+			$config['parameters']['ignored'],
+		));
 	}
 
 	/**

@@ -1,8 +1,8 @@
 <?php
 
-namespace VrtakCZ\NewRelic;
+namespace VrtakCZ\NewRelic\Custom;
 
-class CustomMetrics extends \Nette\Object
+class Metrics extends \Nette\Object
 {
 	/** @var bool */
 	private $enabled;
@@ -18,7 +18,7 @@ class CustomMetrics extends \Nette\Object
 	/**
 	 * @param string $name
 	 * @param float $value Miliseconds
-	 * @return CustomMetrics
+	 * @return Metrics
 	 */
 	public function addMetric($name, $value)
 	{

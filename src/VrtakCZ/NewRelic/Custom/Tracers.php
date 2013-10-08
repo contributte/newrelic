@@ -1,8 +1,8 @@
 <?php
 
-namespace VrtakCZ\NewRelic;
+namespace VrtakCZ\NewRelic\Custom;
 
-class CustomParameters extends \Nette\Object
+class Tracers extends \Nette\Object
 {
 	/** @var bool */
 	private $enabled;
@@ -17,13 +17,13 @@ class CustomParameters extends \Nette\Object
 
 	/**
 	 * @param string
-	 * @param mixed
-	 * @return CustomParameters
+	 * @param string
+	 * @return Tracers
 	 */
-	public function addParameter($name, $value)
+	public function addTracer($function)
 	{
 		if ($this->enabled) {
-			newrelic_add_custom_parameter($name, $value);
+			newrelic_add_custom_tracer($function);
 		}
 		return $this;
 	}

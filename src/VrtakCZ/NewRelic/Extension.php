@@ -61,8 +61,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		}
 
 		$this->setupRUM();
-		$this->setupCustomParameters();
-		$this->setupCustomTracer();
+		$this->setupCustom();
 
 		if (!$this->enabled) {
 			return;
@@ -177,44 +176,44 @@ class Extension extends \Nette\Config\CompilerExtension
 			->addTag('run', true);
 	}
 
-	private function setupCustomParameters()
+	private function setupCustom()
 	{
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		$customParameters = $builder->addDefinition($this->prefix('customParameters'))
-			->setClass('VrtakCZ\NewRelic\CustomParameters')
+		$builder->addDefinition($this->prefix('custom'))
+			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('custom')));
+
+		$customParameters = $builder->addDefinition($this->prefix('custom.parameters'))
+			->setClass('VrtakCZ\NewRelic\Custom\Parameters')
 			->addTag('run', true);
 
-		if (isset($config['customParameters'])) {
-			if (!is_array($config['customParameters'])) {
+		if (isset($config['custom']['parameters'])) {
+			if (!is_array($config['custom']['parameters'])) {
 				throw new \InvalidStateException('Invalid custom parameters structure');
 			}
 
-			foreach ($config['customParameters'] as $name => $value) {
+			foreach ($config['custom']['parameters'] as $name => $value) {
 				$customParameters->addSetup('addParameter', array($name, $value));
 			}
 		}
-	}
 
-	private function setupCustomTracer()
-	{
-		$config = $this->getConfig();
-		$builder = $this->getContainerBuilder();
-
-		$customTracer = $builder->addDefinition($this->prefix('customTracer'))
-			->setClass('VrtakCZ\NewRelic\CustomTracer')
+		$customTracers = $builder->addDefinition($this->prefix('custom.tracers'))
+			->setClass('VrtakCZ\NewRelic\Custom\Tracers')
 			->addTag('run', true);
 
-		if (isset($config['customTracer'])) {
-			if (!is_array($config['customTracer'])) {
-				throw new \InvalidStateException('Invalid custom tracer structure');
+		if (isset($config['custom']['tracers'])) {
+			if (!is_array($config['custom']['tracers'])) {
+				throw new \InvalidStateException('Invalid custom tracers structure');
 			}
 
-			foreach ($config['customTracer'] as $function) {
-				$customTracer->addSetup('addTracer', array($function));
+			foreach ($config['custom']['tracers'] as $function) {
+				$customTracers->addSetup('addTracer', array($function));
 			}
 		}
+
+		$builder->addDefinition($this->prefix('custom.metrics'))
+			->setClass('VrtakCZ\NewRelic\Custom\Metrics', array($this->enabled));
 	}
 
 	private function setupRUM()

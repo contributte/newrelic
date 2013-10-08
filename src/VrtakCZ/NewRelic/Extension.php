@@ -64,6 +64,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$this->setupRUM();
 		$this->setupCustomParameters();
 		$this->setupCustomTracer();
+		$this->setupCustomMetrics();
 
 		if (!$this->enabled) {
 			return;
@@ -220,6 +221,14 @@ class Extension extends \Nette\Config\CompilerExtension
 				$customTracer->addSetup('addTracer', array($function));
 			}
 		}
+	}
+
+	private function setupCustomMetrics()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->addDefinition($this->prefix('customMetrics'))
+			->setClass('VrtakCZ\NewRelic\CustomMetrics', array($this->enabled));
 	}
 
 	private function setupRUM()

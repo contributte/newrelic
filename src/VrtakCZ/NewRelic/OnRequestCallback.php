@@ -8,14 +8,22 @@ use Nette\Application\UI\Presenter;
 
 class OnRequestCallback extends \Nette\Object
 {
+	/** @var array */
+	private $map;
+	/** @var string */
+	private $license;
 	/** @var string */
 	private $actionKey;
 
 	/**
+	 * @param array
+	 * @param string
 	 * @param string
 	 */
-	public function __construct($actionKey = Presenter::ACTION_KEY)
+	public function __construct(array $map, $license, $actionKey = Presenter::ACTION_KEY)
 	{
+		$this->map = $map;
+		$this->license = $license;
 		$this->actionKey = $actionKey;
 	}
 
@@ -34,6 +42,22 @@ class OnRequestCallback extends \Nette\Object
 		if (isset($params[$this->actionKey])) {
 			$action = sprintf('%s:%s', $action, $params[$this->actionKey]);
 		}
+
+		if (!empty($this->map)) {
+			foreach ($this->map as $pattern => $appName) {
+				if (\Nette\Utils\Strings::endsWith($pattern, '*')) {
+					$pattern = \Nette\Utils\Strings::substring($pattern, 0, -1);
+				}
+				if (\Nette\Utils\Strings::startsWith($pattern, ':')) {
+					$pattern = \Nette\Utils\Strings::substring($pattern, 1);
+				}
+
+				if (\Nette\Utils\Strings::startsWith($action, $pattern)) {
+					\VrtakCZ\NewRelic\Extension::setupAppName($appName, $this->license);
+				}
+			}
+		}
+
 		newrelic_name_transaction($action);
 	}
 

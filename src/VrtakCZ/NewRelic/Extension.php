@@ -92,9 +92,16 @@ class Extension extends \Nette\Config\CompilerExtension
 		$initialize = $class->methods['initialize'];
 
 		// AppName and license
-		if (isset($config['appName'])) {
+		if (isset($config['appName']) && !is_array($config['appName'])) {
 			$initialize->addBody('\VrtakCZ\NewRelic\Extension::setupAppName(?, ?);', array(
 				$config['appName'], isset($config['license']) ? $config['license'] : NULL
+			));
+		} elseif (isset($config['appName']) && is_array($config['appName'])) {
+			if (!isset($config['appName']['*'])) {
+				throw new \InvalidStateException('Missing default app name as "*"');
+			}
+			$initialize->addBody('\VrtakCZ\NewRelic\Extension::setupAppName(?, ?);', array(
+				$config['appName']['*'], isset($config['license']) ? $config['license'] : NULL
 			));
 		}
 
@@ -161,13 +168,20 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
+		$map = (isset($config['appName']) && is_array($config['appName'])) ? $config['appName'] : array();
+		$license = isset($config['license']) ? $config['license'] : NULL;
+
 		$onRequestCallback = $builder->addDefinition($this->prefix('onRequestCallback'))
 			->addSetup('register', array('@\Nette\Application\Application'))
 			->addTag('run', true);
 		if (isset($config['actionKey'])) {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array($config['actionKey']));
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array(
+				$map, $license, $config['actionKey'],
+			));
 		} else {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback');
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array(
+				$map, $license,
+			));
 		}
 	}
 

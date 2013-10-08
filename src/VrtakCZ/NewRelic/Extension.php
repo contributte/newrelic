@@ -76,6 +76,10 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
+
+		if (isset($config['ratio']) && mt_rand(0, 99) > round($config['ratio'] * 100) - 1) {
+			newrelic_ignore_transaction();
+		}
 	}
 
 	public function afterCompile(ClassType $class)

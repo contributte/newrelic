@@ -183,7 +183,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$customParameters = $builder->addDefinition($this->prefix('customParameters'))
-			->setClass('VrtakCZ\NewRelic\CustomParameters')
+			->setClass('VrtakCZ\NewRelic\CustomParameters', array($this->enabled))
 			->addTag('run', true);
 
 		if (isset($config['customParameters'])) {
@@ -203,7 +203,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$customTracer = $builder->addDefinition($this->prefix('customTracer'))
-			->setClass('VrtakCZ\NewRelic\CustomTracer')
+			->setClass('VrtakCZ\NewRelic\CustomTracer', array($this->enabled))
 			->addTag('run', true);
 
 		if (isset($config['customTracer'])) {

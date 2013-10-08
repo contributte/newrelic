@@ -20,7 +20,8 @@ class Extension extends \Nette\Config\CompilerExtension
 			\Nette\Diagnostics\Logger::CRITICAL,
 		),
 		'rum' => array(
-			'autoEnabled' => TRUE,
+			'enabled' => 'auto',
+			'ratio' => 1,
 		),
 		'transactionTracer' => array(
 			'enabled' => TRUE,
@@ -101,7 +102,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$initialize->addBody('\Nette\Diagnostics\Debugger::$logger = $newRelicLogger;');
 
 		// Options
-		if (!$config['rum']['autoEnabled']) {
+		if ('auto' !== $config['rum']['enabled']) {
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", array(
@@ -219,19 +220,22 @@ class Extension extends \Nette\Config\CompilerExtension
 
 	private function setupRUM()
 	{
+		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
+
+		$rumEnabled = $this->enabled && true === $config['rum']['enabled'] && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
 
 		$builder->addDefinition($this->prefix('rum'))
 			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setClass('VrtakCZ\NewRelic\RUM\User', array($this->enabled));
+			->setClass('VrtakCZ\NewRelic\RUM\User', array($rumEnabled));
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($this->enabled));
+			->setClass('VrtakCZ\NewRelic\RUM\HeaderControl', array($rumEnabled));
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($this->enabled));
+			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($rumEnabled));
 	}
 
 	/**

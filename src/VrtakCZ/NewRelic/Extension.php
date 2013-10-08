@@ -21,6 +21,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		),
 		'rum' => array(
 			'enabled' => 'auto',
+			'ratio' => 1,
 		),
 		'transactionTracer' => array(
 			'enabled' => TRUE,
@@ -222,7 +223,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && true === $config['rum']['enabled'];
+		$rumEnabled = $this->enabled && true === $config['rum']['enabled'] && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
 
 		$builder->addDefinition($this->prefix('rum'))
 			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));

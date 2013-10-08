@@ -30,7 +30,7 @@ newrelic:
 
 	# optional options with default values
 	rum:
-		autoEnabled: Yes
+		enabled: auto # other options are Yes/No
 	transactionTracer:
 		enabled: Yes
 		detail: 1

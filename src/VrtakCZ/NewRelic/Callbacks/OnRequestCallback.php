@@ -46,6 +46,9 @@ class OnRequestCallback extends \Nette\Object
 
 		if (!empty($this->map)) {
 			foreach ($this->map as $pattern => $appName) {
+				if ($pattern === '*') {
+					continue;
+				}
 				if (Strings::endsWith($pattern, '*')) {
 					$pattern = Strings::substring($pattern, 0, -1);
 				}

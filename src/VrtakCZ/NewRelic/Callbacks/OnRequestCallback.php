@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic;
+namespace VrtakCZ\NewRelic\Callbacks;
 
 use Nette\Application\Application;
 use Nette\Application\Request;

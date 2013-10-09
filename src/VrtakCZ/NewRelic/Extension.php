@@ -175,11 +175,11 @@ class Extension extends \Nette\Config\CompilerExtension
 			->addSetup('register', array('@\Nette\Application\Application'))
 			->addTag('run', true);
 		if (isset($config['actionKey'])) {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array(
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
 				$map, $license, $config['actionKey'],
 			));
 		} else {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\OnRequestCallback', array(
+			$onRequestCallback->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
 				$map, $license,
 			));
 		}
@@ -190,7 +190,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass('VrtakCZ\NewRelic\OnErrorCallback')
+			->setClass('VrtakCZ\NewRelic\Callbacks\OnErrorCallback')
 			->addSetup('register', array('@\Nette\Application\Application'))
 			->addTag('run', true);
 	}

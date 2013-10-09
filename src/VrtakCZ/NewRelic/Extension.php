@@ -171,18 +171,12 @@ class Extension extends \Nette\Config\CompilerExtension
 		$map = (isset($config['appName']) && is_array($config['appName'])) ? $config['appName'] : array();
 		$license = isset($config['license']) ? $config['license'] : NULL;
 
-		$onRequestCallback = $builder->addDefinition($this->prefix('onRequestCallback'))
+		$builder->addDefinition($this->prefix('onRequestCallback'))
+			->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
+				$map, $license, isset($config['actionKey']) ? $config['actionKey'] : NULL,
+			))
 			->addSetup('register', array('@\Nette\Application\Application'))
-			->addTag('run', true);
-		if (isset($config['actionKey'])) {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
-				$map, $license, $config['actionKey'],
-			));
-		} else {
-			$onRequestCallback->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
-				$map, $license,
-			));
-		}
+			->addTag('run', TRUE);
 	}
 
 	private function setupApplicationOnError()
@@ -192,7 +186,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$builder->addDefinition($this->prefix('onErrorCallback'))
 			->setClass('VrtakCZ\NewRelic\Callbacks\OnErrorCallback')
 			->addSetup('register', array('@\Nette\Application\Application'))
-			->addTag('run', true);
+			->addTag('run', TRUE);
 	}
 
 	private function setupCustom()
@@ -205,7 +199,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$customParameters = $builder->addDefinition($this->prefix('custom.parameters'))
 			->setClass('VrtakCZ\NewRelic\Custom\Parameters', array($this->enabled))
-			->addTag('run', true);
+			->addTag('run', TRUE);
 
 		if (isset($config['custom']['parameters'])) {
 			if (!is_array($config['custom']['parameters'])) {
@@ -219,7 +213,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$customTracers = $builder->addDefinition($this->prefix('custom.tracers'))
 			->setClass('VrtakCZ\NewRelic\Custom\Tracers', array($this->enabled))
-			->addTag('run', true);
+			->addTag('run', TRUE);
 
 		if (isset($config['custom']['tracers'])) {
 			if (!is_array($config['custom']['tracers'])) {
@@ -240,7 +234,7 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && true === $config['rum']['enabled'] && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
+		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
 
 		$builder->addDefinition($this->prefix('rum'))
 			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));

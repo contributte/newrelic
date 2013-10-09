@@ -5,6 +5,7 @@ namespace VrtakCZ\NewRelic\Callbacks;
 use Nette\Application\Application;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
+use Nette\Utils\Strings;
 
 class OnRequestCallback extends \Nette\Object
 {
@@ -45,14 +46,14 @@ class OnRequestCallback extends \Nette\Object
 
 		if (!empty($this->map)) {
 			foreach ($this->map as $pattern => $appName) {
-				if (\Nette\Utils\Strings::endsWith($pattern, '*')) {
-					$pattern = \Nette\Utils\Strings::substring($pattern, 0, -1);
+				if (Strings::endsWith($pattern, '*')) {
+					$pattern = Strings::substring($pattern, 0, -1);
 				}
-				if (\Nette\Utils\Strings::startsWith($pattern, ':')) {
-					$pattern = \Nette\Utils\Strings::substring($pattern, 1);
+				if (Strings::startsWith($pattern, ':')) {
+					$pattern = Strings::substring($pattern, 1);
 				}
 
-				if (\Nette\Utils\Strings::startsWith($action, $pattern)) {
+				if (Strings::startsWith($action, $pattern)) {
 					\VrtakCZ\NewRelic\Extension::setupAppName($appName, $this->license);
 				}
 			}

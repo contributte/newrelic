@@ -58,6 +58,7 @@ class OnRequestCallback extends \Nette\Object
 
 				if (Strings::startsWith($action, $pattern)) {
 					\VrtakCZ\NewRelic\Extension::setupAppName($appName, $this->license);
+					break;
 				}
 			}
 		}

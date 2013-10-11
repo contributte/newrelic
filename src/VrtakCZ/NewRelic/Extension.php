@@ -5,6 +5,7 @@ namespace VrtakCZ\NewRelic;
 use Nette\Config\Configurator;
 use Nette\Config\Compiler;
 use Nette\Utils\PhpGenerator\ClassType;
+use Nette\Application\UI\Presenter;
 
 class Extension extends \Nette\Config\CompilerExtension
 {
@@ -173,7 +174,7 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setClass('VrtakCZ\NewRelic\Callbacks\OnRequestCallback', array(
-				$map, $license, isset($config['actionKey']) ? $config['actionKey'] : NULL,
+				$map, $license, isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
 			))
 			->addSetup('register', array('@\Nette\Application\Application'))
 			->addTag('run', TRUE);

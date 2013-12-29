@@ -2,12 +2,10 @@
 
 namespace VrtakCZ\NewRelic;
 
-use Nette\Config\Configurator;
-use Nette\Config\Compiler;
-use Nette\Utils\PhpGenerator\ClassType;
+use Nette\PhpGenerator\ClassType;
 use Nette\Application\UI\Presenter;
 
-class Extension extends \Nette\Config\CompilerExtension
+class Extension extends \Nette\DI\CompilerExtension
 {
 	/** @var bool */
 	private $skipIfIsDisabled;
@@ -195,9 +193,6 @@ class Extension extends \Nette\Config\CompilerExtension
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('custom'))
-			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('custom')));
-
 		$customParameters = $builder->addDefinition($this->prefix('custom.parameters'))
 			->setClass('VrtakCZ\NewRelic\Custom\Parameters', array($this->enabled))
 			->addTag('run', TRUE);
@@ -237,9 +232,6 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
 
-		$builder->addDefinition($this->prefix('rum'))
-			->setClass('Nette\DI\NestedAccessor', array('@container', $this->prefix('rum')));
-
 		$builder->addDefinition($this->prefix('rum.user'))
 			->setClass('VrtakCZ\NewRelic\RUM\User', array($rumEnabled));
 
@@ -248,17 +240,5 @@ class Extension extends \Nette\Config\CompilerExtension
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
 			->setClass('VrtakCZ\NewRelic\RUM\FooterControl', array($rumEnabled));
-	}
-
-	/**
-	 * @param \Nette\Config\Configurator
-	 * @param string
-	 */
-	public static function register(Configurator $configurator, $name = 'newrelic')
-	{
-		$class = get_called_class();
-		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler) use ($class, $name) {
-			$compiler->addExtension($name, new $class);
-		};
 	}
 }

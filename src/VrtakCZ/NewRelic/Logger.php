@@ -2,8 +2,6 @@
 
 namespace VrtakCZ\NewRelic;
 
-use Nette\Diagnostics\Debugger;
-
 class Logger extends \Nette\Diagnostics\Logger
 {
 	/** @var array */
@@ -14,7 +12,7 @@ class Logger extends \Nette\Diagnostics\Logger
 	 */
 	public function __construct(array $logLevel)
 	{
-		$oldLogger = Debugger::$logger;
+		$oldLogger = \Nette\Diagnostics\Debugger::getLogger();
 		static::$emailSnooze =& $oldLogger::$emailSnooze;
 		$this->mailer =& $oldLogger->mailer;
 		$this->directory =& $oldLogger->directory;

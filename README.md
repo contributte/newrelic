@@ -8,11 +8,11 @@ Installation
 composer require vrtak-cz/newrelic-nette
 ```
 
-edit `app/bootstrap.php`
+edit `app/config/config.neon`
 
-```php
-// add this line after `$configurator = new Nette\Config\Configurator;`
-\VrtakCZ\NewRelic\Extension::register($configurator);
+```yaml
+extensions:
+    newrelic: VrtakCZ\NewRelic\Extension
 ```
 
 Config
@@ -59,14 +59,14 @@ add this component factory to your base presenter
 ```php
 protected function createComponentNewRelicHeader()
 {
-	$control = $this->context->newrelic->rum->headerControl;
+	$control = $this->context->getService('newrelic.rum')->headerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }
 
 protected function createComponentNewRelicFooter()
 {
-	$control = $this->context->newrelic->rum->footerControl;
+	$control = $this->context->getService('newrelic.rum')->footerControl;
 	$control->disableScriptTag(); // optionall
 	return $control;
 }
@@ -87,5 +87,3 @@ and add this to your `@layout` footer (before `</body>`)
 License
 -------
 NewRelic Nette is licensed under the MIT License - see the LICENSE file for details
-
-

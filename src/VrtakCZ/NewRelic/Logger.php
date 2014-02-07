@@ -13,7 +13,7 @@ class Logger extends \Nette\Diagnostics\Logger
 	public function __construct(array $logLevel)
 	{
 		$oldLogger = \Nette\Diagnostics\Debugger::getLogger();
-		static::$emailSnooze =& $oldLogger::$emailSnooze;
+		$this->emailSnooze =& $oldLogger->emailSnooze;
 		$this->mailer =& $oldLogger->mailer;
 		$this->directory =& $oldLogger->directory;
 		$this->email =& $oldLogger->email;

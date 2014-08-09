@@ -68,9 +68,9 @@ class Extension extends \Nette\DI\CompilerExtension
 		}
 
 		if (!extension_loaded('newrelic')) {
-			throw new \InvalidStateException('NewRelic extension is not loaded');
+			throw new \RuntimeException('NewRelic extension is not loaded');
 		} elseif (!ini_get('newrelic.enabled')) {
-			throw new \InvalidStateException('NewRelic is not enabled');
+			throw new \RuntimeException('NewRelic is not enabled');
 		}
 
 		$this->setupApplicationOnRequest();
@@ -97,7 +97,7 @@ class Extension extends \Nette\DI\CompilerExtension
 			));
 		} elseif (isset($config['appName']) && is_array($config['appName'])) {
 			if (!isset($config['appName']['*'])) {
-				throw new \InvalidStateException('Missing default app name as "*"');
+				throw new \RuntimeException('Missing default app name as "*"');
 			}
 			$initialize->addBody('\VrtakCZ\NewRelic\Extension::setupAppName(?, ?);', array(
 				$config['appName']['*'], isset($config['license']) ? $config['license'] : NULL
@@ -199,7 +199,7 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		if (isset($config['custom']['parameters'])) {
 			if (!is_array($config['custom']['parameters'])) {
-				throw new \InvalidStateException('Invalid custom parameters structure');
+				throw new \RuntimeException('Invalid custom parameters structure');
 			}
 
 			foreach ($config['custom']['parameters'] as $name => $value) {
@@ -213,7 +213,7 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		if (isset($config['custom']['tracers'])) {
 			if (!is_array($config['custom']['tracers'])) {
-				throw new \InvalidStateException('Invalid custom tracers structure');
+				throw new \RuntimeException('Invalid custom tracers structure');
 			}
 
 			foreach ($config['custom']['tracers'] as $function) {

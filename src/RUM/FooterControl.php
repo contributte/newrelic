@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\RUM;
+namespace VrtakCZ\NewRelic\Nette\RUM;
 
 class FooterControl extends \Nette\Application\UI\Control
 {

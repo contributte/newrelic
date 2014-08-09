@@ -14,7 +14,7 @@ edit `app/config/config.neon`
 
 ```yaml
 extensions:
-    newrelic: VrtakCZ\NewRelic\Extension
+    newrelic: VrtakCZ\NewRelic\Nette\Extension
 ```
 
 Config
@@ -29,6 +29,7 @@ newrelic:
 	actionKey: action # default - optional - action parameter name
 	logLevel: #defaults
 		- critical
+		- exception
 		- error
 
 	# optional options with default values

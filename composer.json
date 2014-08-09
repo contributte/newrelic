@@ -17,12 +17,14 @@
 		"source":"https://github.com/Vrtak-CZ/NewRelic-Nette"
 	},
 	"autoload": {
-		"psr-0": {
-			"VrtakCZ\\NewRelic": "src"
+		"psr-4": {
+			"VrtakCZ\\NewRelic\\Nette\\": "src/"
 		}
 	},
 	"require": {
 		"php": ">=5.3.0",
-		"nette/nette": "~2.1.0"
+		"nette/di": "~2.2.0",
+		"nette/application": "~2.2.0",
+		"vrtak-cz/newrelic-tracy": "~4.0.0"
 	}
 }

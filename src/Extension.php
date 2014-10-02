@@ -55,7 +55,7 @@ class Extension extends \Nette\DI\CompilerExtension
 	public function loadConfiguration()
 	{
 		$config = $this->getConfig();
-		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || Bootstrap::isEnabled())) {
+		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
 			$this->enabled = FALSE;
 		}
 

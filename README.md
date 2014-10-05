@@ -1,7 +1,9 @@
 [NewRelic](http://newrelic.com) PHP agent integration for [Nette Framework](http://nette.org)
 =============================================================================================
 
-[![Latest Stable Version](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/version.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette) [![Composer Downloads](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/d/total.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette) [![Dependencies Status](http://depending.in/Vrtak-CZ/NewRelic-Nette.png?branch=master)](http://depending.in/Vrtak-CZ/NewRelic-Nette)
+[![Latest Stable Version](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/version.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
+[![Composer Downloads](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/d/total.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
+[![Dependency Status](https://www.versioneye.com/user/projects/534bc43bfe0d0784f300004a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/534bc43bfe0d0784f300004a)
 
 Installation
 ------------

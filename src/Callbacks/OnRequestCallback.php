@@ -64,6 +64,7 @@ class OnRequestCallback extends \Nette\Object
 		}
 
 		newrelic_name_transaction($action);
+		newrelic_disable_autorum();
 	}
 
 	/**

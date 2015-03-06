@@ -22,7 +22,7 @@
 		}
 	},
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=5.4.0",
 		"nette/di": "~2.2.0",
 		"nette/application": "~2.2.0",
 		"vrtak-cz/newrelic-tracy": "~4.1.0"

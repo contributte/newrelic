@@ -1,9 +1,14 @@
 [NewRelic](http://newrelic.com) PHP agent integration for [Nette Framework](http://nette.org)
 =============================================================================================
 
-[![Latest Stable Version](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/version.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
-[![Composer Downloads](https://poser.pugx.org/Vrtak-CZ/NewRelic-Nette/d/total.png)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
-[![Dependency Status](https://www.versioneye.com/user/projects/534bc43bfe0d0784f300004a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/534bc43bfe0d0784f300004a)
+[![Build Status](https://img.shields.io/travis/Vrtak-CZ/NewRelic-Nette.svg?style=flat-square)](https://travis-ci.org/Vrtak-CZ/NewRelic-Nette)
+[![Latest Stable Version](https://img.shields.io/packagist/v/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
+[![Composer Downloads](https://img.shields.io/packagist/dt/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
+[![Dependency Status](https://img.shields.io/versioneye/d/user/projects/534bc43bfe0d0784f300004a.svg?style=flat-square)](https://www.versioneye.com/user/projects/534bc43bfe0d0784f300004a)
+
+## Requirements
+- Nette >=2.2.0 (2.2.x support will be removed on 31 Jan 2016)
+- PHP >=5.4.0 (5.4.x support will be removed on 14 Sep 2015)
 
 Installation
 ------------

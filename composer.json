@@ -26,5 +26,19 @@
 		"nette/di": "~2.2,<2.4.0",
 		"nette/application": "~2.2,<2.4.0",
 		"vrtak-cz/newrelic-tracy": "~5.0.0"
-	}
+	},
+	"require-dev": {
+		"jakub-onderka/php-console-highlighter": "~0.3.1",
+		"jakub-onderka/php-parallel-lint": "~0.8.0",
+		"nella/coding-standard": "~2.0.0"
+	},
+	"archive": {
+		"exclude": [
+			".gitignore",
+			"/.travis.yml",
+			"/.travis.composer.php"
+		]
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

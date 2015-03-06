@@ -4,8 +4,10 @@ namespace VrtakCZ\NewRelic\Nette\RUM;
 
 class FooterControl extends \Nette\Application\UI\Control
 {
+
 	/** @var bool */
 	private $enabled;
+
 	/** @var bool */
 	private $withScriptTag = TRUE;
 
@@ -33,4 +35,5 @@ class FooterControl extends \Nette\Application\UI\Control
 			echo newrelic_get_browser_timing_footer($this->withScriptTag);
 		}
 	}
+
 }

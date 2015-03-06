@@ -6,6 +6,7 @@ use Nette\Application\Application;
 
 class OnErrorCallback extends \Nette\Object
 {
+
 	/**
 	 * @param \Nette\Application\Application
 	 * @param \Exception
@@ -26,4 +27,5 @@ class OnErrorCallback extends \Nette\Object
 	{
 		$application->onError[] = $this;
 	}
+
 }

@@ -4,6 +4,7 @@ namespace VrtakCZ\NewRelic\Nette\RUM;
 
 class User extends \Nette\Object
 {
+
 	/** @var bool */
 	private $enabled;
 
@@ -29,4 +30,5 @@ class User extends \Nette\Object
 		}
 		return $this;
 	}
+
 }

@@ -9,10 +9,13 @@ use Nette\Utils\Strings;
 
 class OnRequestCallback extends \Nette\Object
 {
+
 	/** @var array */
 	private $map;
+
 	/** @var string */
 	private $license;
+
 	/** @var string */
 	private $actionKey;
 
@@ -74,4 +77,5 @@ class OnRequestCallback extends \Nette\Object
 	{
 		$application->onRequest[] = $this;
 	}
+
 }

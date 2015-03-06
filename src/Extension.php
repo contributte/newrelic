@@ -9,8 +9,10 @@ use VrtakCZ\NewRelic\Tracy\Bootstrap;
 
 class Extension extends \Nette\DI\CompilerExtension
 {
+
 	/** @var bool */
 	private $skipIfIsDisabled;
+
 	/** @var bool */
 	private $enabled = TRUE;
 
@@ -95,20 +97,22 @@ class Extension extends \Nette\DI\CompilerExtension
 		// AppName and license
 		if (isset($config['appName']) && !is_array($config['appName'])) {
 			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', array(
-				$config['appName'], isset($config['license']) ? $config['license'] : NULL
+				$config['appName'],
+				isset($config['license']) ? $config['license'] : NULL,
 			));
 		} elseif (isset($config['appName']) && is_array($config['appName'])) {
 			if (!isset($config['appName']['*'])) {
 				throw new \RuntimeException('Missing default app name as "*"');
 			}
 			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', array(
-				$config['appName']['*'], isset($config['license']) ? $config['license'] : NULL
+				$config['appName']['*'],
+				isset($config['license']) ? $config['license'] : NULL,
 			));
 		}
 
 		// Logger
 		$initialize->addBody('\Tracy\Debugger::setLogger(new \VrtakCZ\NewRelic\Tracy\Logger(?));', array(
-			array_unique($config['logLevel'])
+			array_unique($config['logLevel']),
 		));
 
 		$this->setupCustom($initialize);
@@ -144,7 +148,7 @@ class Extension extends \Nette\DI\CompilerExtension
 		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", array(
 			(string) $config['errorCollector']['recordDatabaseErrors'],
 		));
-		$initialize->addBody("newrelic_capture_params(?);", array(
+		$initialize->addBody('newrelic_capture_params(?);', array(
 			$config['parameters']['capture'],
 		));
 		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(
@@ -162,7 +166,9 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', array(
-				$map, $license, isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
+				$map,
+				$license,
+				isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
 			))
 			->addSetup('register', array('@\Nette\Application\Application'))
 			->addTag('run', TRUE);
@@ -189,7 +195,8 @@ class Extension extends \Nette\DI\CompilerExtension
 
 			foreach ($config['custom']['parameters'] as $name => $value) {
 				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', array(
-					$name, $value
+					$name,
+					$value,
 				));
 			}
 		}
@@ -221,4 +228,5 @@ class Extension extends \Nette\DI\CompilerExtension
 		$builder->addDefinition($this->prefix('rum.footerControl'))
 			->setClass('VrtakCZ\NewRelic\Nette\RUM\FooterControl', array($rumEnabled));
 	}
+
 }

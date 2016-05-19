@@ -87,7 +87,7 @@ class Extension extends \Nette\DI\CompilerExtension
 		}
 
 		$config = $this->getConfig($this->defaults);
-		$initialize = $class->methods['initialize'];
+		$initialize = $class->getMethod('initialize');
 
 		// AppName and license
 		if (isset($config['appName']) && !is_array($config['appName'])) {

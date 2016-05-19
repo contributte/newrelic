@@ -9,18 +9,17 @@ class User extends \Nette\Object
 	private $enabled;
 
 	/**
-	 * @param bool
+	 * @param bool $enabled
 	 */
 	public function __construct($enabled = TRUE)
 	{
-		parent::__construct();
 		$this->enabled = $enabled;
 	}
 
 	/**
-	 * @param string
-	 * @param string
-	 * @param string
+	 * @param string $user
+	 * @param string $account
+	 * @param string $product
 	 * @return User
 	 */
 	public function setAttributes($user, $account, $product)

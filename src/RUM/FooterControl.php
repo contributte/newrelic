@@ -12,7 +12,7 @@ class FooterControl extends \Nette\Application\UI\Control
 	private $withScriptTag = TRUE;
 
 	/**
-	 * @param bool
+	 * @param bool $enabled
 	 */
 	public function __construct($enabled = TRUE)
 	{

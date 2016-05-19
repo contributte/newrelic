@@ -2,9 +2,9 @@
 
 namespace VrtakCZ\NewRelic\Nette;
 
+use Nette\Application\UI\Presenter;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
-use Nette\Application\UI\Presenter;
 use VrtakCZ\NewRelic\Tracy\Bootstrap;
 
 class Extension extends \Nette\DI\CompilerExtension
@@ -17,17 +17,17 @@ class Extension extends \Nette\DI\CompilerExtension
 	private $enabled = TRUE;
 
 	/** @var array */
-	public $defaults = array(
-		'logLevel' => array(
+	public $defaults = [
+		'logLevel' => [
 			\Tracy\Logger::CRITICAL,
 			\Tracy\Logger::EXCEPTION,
 			\Tracy\Logger::ERROR,
-		),
-		'rum' => array(
+		],
+		'rum' => [
 			'enabled' => 'auto',
 			'ratio' => 1,
-		),
-		'transactionTracer' => array(
+		],
+		'transactionTracer' => [
 			'enabled' => TRUE,
 			'detail' => 1,
 			'recordSql' => 'obfuscated',
@@ -35,19 +35,19 @@ class Extension extends \Nette\DI\CompilerExtension
 			'threshold' => 'apdex_f',
 			'stackTraceThreshold' => 500,
 			'explainThreshold' => 500,
-		),
-		'errorCollector' => array(
+		],
+		'errorCollector' => [
 			'enabled' => TRUE,
 			'recordDatabaseErrors' => TRUE,
-		),
-		'parameters' => array(
+		],
+		'parameters' => [
 			'capture' => FALSE,
-			'ignored' => array(),
-		),
-	);
+			'ignored' => [],
+		],
+	];
 
 	/**
-	 * @param bool
+	 * @param bool $skipIfIsDisabled
 	 */
 	public function __construct($skipIfIsDisabled = FALSE)
 	{
@@ -96,24 +96,24 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		// AppName and license
 		if (isset($config['appName']) && !is_array($config['appName'])) {
-			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', array(
+			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName'],
 				isset($config['license']) ? $config['license'] : NULL,
-			));
+			]);
 		} elseif (isset($config['appName']) && is_array($config['appName'])) {
 			if (!isset($config['appName']['*'])) {
 				throw new \RuntimeException('Missing default app name as "*"');
 			}
-			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', array(
+			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName']['*'],
 				isset($config['license']) ? $config['license'] : NULL,
-			));
+			]);
 		}
 
 		// Logger
-		$initialize->addBody('\Tracy\Debugger::setLogger(new \VrtakCZ\NewRelic\Tracy\Logger(?));', array(
+		$initialize->addBody('\Tracy\Debugger::setLogger(new \VrtakCZ\NewRelic\Tracy\Logger(?));', [
 			array_unique($config['logLevel']),
-		));
+		]);
 
 		$this->setupCustom($initialize);
 
@@ -121,39 +121,39 @@ class Extension extends \Nette\DI\CompilerExtension
 		if ($config['rum']['enabled'] !== 'auto') {
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", array(
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", [
 			(string) $config['transactionTracer']['enabled'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", [
 			(string) $config['transactionTracer']['detail'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", [
 			(string) $config['transactionTracer']['recordSql'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", [
 			(string) $config['transactionTracer']['slowSql'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", [
 			(string) $config['transactionTracer']['threshold'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", [
 			(string) $config['transactionTracer']['stackTraceThreshold'],
-		));
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", [
 			(string) $config['transactionTracer']['explainThreshold'],
-		));
-		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", [
 			(string) $config['errorCollector']['enabled'],
-		));
-		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", [
 			(string) $config['errorCollector']['recordDatabaseErrors'],
-		));
-		$initialize->addBody('newrelic_capture_params(?);', array(
+		]);
+		$initialize->addBody('newrelic_capture_params(?);', [
 			$config['parameters']['capture'],
-		));
-		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", array(
+		]);
+		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", [
 			implode(',', $config['parameters']['ignored']),
-		));
+		]);
 	}
 
 	private function setupApplicationOnRequest()
@@ -161,16 +161,16 @@ class Extension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$map = (isset($config['appName']) && is_array($config['appName'])) ? $config['appName'] : array();
+		$map = (isset($config['appName']) && is_array($config['appName'])) ? $config['appName'] : [];
 		$license = isset($config['license']) ? $config['license'] : NULL;
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
-			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', array(
+			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', [
 				$map,
 				$license,
 				isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
-			))
-			->addSetup('register', array('@\Nette\Application\Application'))
+			])
+			->addSetup('register', ['@\Nette\Application\Application'])
 			->addTag('run', TRUE);
 	}
 
@@ -180,7 +180,7 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
 			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnErrorCallback')
-			->addSetup('register', array('@\Nette\Application\Application'))
+			->addSetup('register', ['@\Nette\Application\Application'])
 			->addTag('run', TRUE);
 	}
 
@@ -194,10 +194,10 @@ class Extension extends \Nette\DI\CompilerExtension
 			}
 
 			foreach ($config['custom']['parameters'] as $name => $value) {
-				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', array(
+				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
 					$name,
 					$value,
-				));
+				]);
 			}
 		}
 
@@ -207,7 +207,7 @@ class Extension extends \Nette\DI\CompilerExtension
 			}
 
 			foreach ($config['custom']['tracers'] as $function) {
-				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Tracers::addTracer(?);', array($function));
+				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
 			}
 		}
 	}
@@ -220,13 +220,13 @@ class Extension extends \Nette\DI\CompilerExtension
 		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\User', array($rumEnabled));
+			->setClass('VrtakCZ\NewRelic\Nette\RUM\User', [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\HeaderControl', array($rumEnabled));
+			->setClass('VrtakCZ\NewRelic\Nette\RUM\HeaderControl', [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\FooterControl', array($rumEnabled));
+			->setClass('VrtakCZ\NewRelic\Nette\RUM\FooterControl', [$rumEnabled]);
 	}
 
 }

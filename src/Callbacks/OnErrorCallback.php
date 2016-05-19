@@ -8,8 +8,8 @@ class OnErrorCallback extends \Nette\Object
 {
 
 	/**
-	 * @param \Nette\Application\Application
-	 * @param \Exception
+	 * @param \Nette\Application\Application $application
+	 * @param \Exception $e
 	 */
 	public function __invoke(Application $application, \Exception $e)
 	{
@@ -21,7 +21,7 @@ class OnErrorCallback extends \Nette\Object
 	}
 
 	/**
-	 * @param \Nette\Application\Application
+	 * @param \Nette\Application\Application $application
 	 */
 	public function register(Application $application)
 	{

@@ -20,9 +20,9 @@ class OnRequestCallback extends \Nette\Object
 	private $actionKey;
 
 	/**
-	 * @param array
-	 * @param string
-	 * @param string
+	 * @param array $map
+	 * @param string $license
+	 * @param string $actionKey
 	 */
 	public function __construct(array $map, $license, $actionKey = Presenter::ACTION_KEY)
 	{
@@ -32,8 +32,8 @@ class OnRequestCallback extends \Nette\Object
 	}
 
 	/**
-	 * @param \Nette\Application\Application
-	 * @param \Nette\Application\Request
+	 * @param \Nette\Application\Application $application
+	 * @param \Nette\Application\Request $request
 	 */
 	public function __invoke(Application $application, Request $request)
 	{
@@ -71,7 +71,7 @@ class OnRequestCallback extends \Nette\Object
 	}
 
 	/**
-	 * @param \Nette\Application\Application
+	 * @param \Nette\Application\Application $application
 	 */
 	public function register(Application $application)
 	{

@@ -25,7 +25,6 @@ class Extension extends \Nette\DI\CompilerExtension
 		],
 		'rum' => [
 			'enabled' => 'auto',
-			'ratio' => 1,
 		],
 		'transactionTracer' => [
 			'enabled' => TRUE,
@@ -79,10 +78,6 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
-
-		if (isset($config['ratio']) && mt_rand(0, 99) > round($config['ratio'] * 100) - 1) {
-			newrelic_ignore_transaction();
-		}
 	}
 
 	public function afterCompile(ClassType $class)
@@ -217,7 +212,7 @@ class Extension extends \Nette\DI\CompilerExtension
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE && mt_rand(0, 99) <= round($config['rum']['ratio'] * 100) - 1;
+		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE;
 
 		$builder->addDefinition($this->prefix('rum.user'))
 			->setClass('VrtakCZ\NewRelic\Nette\RUM\User', [$rumEnabled]);

@@ -22,8 +22,8 @@ before_install:
   - php .travis.composer.php
 
 install:
-  - composer install --no-interaction --prefer-source
-  - if  [ $PREFER_LOWEST = 'true' ]; then composer update --prefer-lowest --prefer-stable; fi
+  - composer install --no-interaction --prefer-source --ignore-platform-reqs
+  - if  [ $PREFER_LOWEST = 'true' ]; then composer update --prefer-lowest --prefer-stable --ignore-platform-reqs; fi
 
 script:
   - vendor/bin/parallel-lint -e php,phpt src

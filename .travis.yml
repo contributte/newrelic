@@ -4,8 +4,6 @@ sudo: false
 
 env:
   - NETTE=default
-  - NETTE=~2.2.0
-  - NETTE=~2.2.0 PREFER_LOWEST=true
   - NETTE=~2.3.0
   - NETTE=~2.3.0 PREFER_LOWEST=true
   - NETTE=~2.4.0

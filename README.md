@@ -30,7 +30,6 @@ Config
 ```yaml
 newrelic:
 	enabled: Yes #default
-	ratio: 1
 	appName: YourApplicationName #optional
 	license: yourLicenseCode #optional
 	actionKey: action # default - optional - action parameter name

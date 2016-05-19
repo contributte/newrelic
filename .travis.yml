@@ -8,6 +8,7 @@ env:
   - NETTE=~2.2.0 PREFER_LOWEST=true
   - NETTE=~2.3.0
   - NETTE=~2.3.0 PREFER_LOWEST=true
+  - NETTE=~2.4.0
 
 php:
   - 5.5

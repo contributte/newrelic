@@ -23,8 +23,8 @@
 	},
 	"require": {
 		"php": ">=5.5.0",
-		"nette/di": "~2.2,<2.4.0",
-		"nette/application": "~2.2,<2.4.0",
+		"nette/di": "~2.2,<2.5.0",
+		"nette/application": "~2.2,<2.5.0",
 		"vrtak-cz/newrelic-tracy": "~5.0.1"
 	},
 	"require-dev": {

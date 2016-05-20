@@ -9,9 +9,9 @@ class OnErrorCallback extends \Nette\Object
 
 	/**
 	 * @param \Nette\Application\Application $application
-	 * @param \Exception $e
+	 * @param \Exception|\Throwable $e
 	 */
-	public function __invoke(Application $application, \Exception $e)
+	public function __invoke(Application $application, $e)
 	{
 		if ($e instanceof \Nette\Application\BadRequestException) { // skip 4xx errors
 			return;

@@ -4,7 +4,7 @@ namespace VrtakCZ\NewRelic\Nette\Callbacks;
 
 use Nette\Application\Application;
 
-class OnErrorCallback extends \Nette\Object
+class OnErrorCallback
 {
 
 	/**

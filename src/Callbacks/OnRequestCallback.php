@@ -7,7 +7,7 @@ use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 use Nette\Utils\Strings;
 
-class OnRequestCallback extends \Nette\Object
+class OnRequestCallback
 {
 
 	/** @var array */

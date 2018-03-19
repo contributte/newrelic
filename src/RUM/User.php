@@ -2,7 +2,7 @@
 
 namespace VrtakCZ\NewRelic\Nette\RUM;
 
-class User extends \Nette\Object
+class User
 {
 
 	/** @var bool */

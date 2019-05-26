@@ -22,10 +22,10 @@
 		}
 	},
 	"require": {
-		"php": "^7.1",
+		"php": ">=7.1",
 		"nette/di": "~2.4",
 		"nette/application": "~2.4",
-		"vrtak-cz/newrelic-tracy": "^7.0"
+		"vrtak-cz/newrelic-tracy": "^8.0"
 	},
 	"require-dev": {
 		"jakub-onderka/php-console-highlighter": "0.3.2",

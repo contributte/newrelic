@@ -20,12 +20,4 @@ class OnErrorCallback
 		newrelic_notice_error($e->getMessage(), $e);
 	}
 
-	/**
-	 * @param \Nette\Application\Application $application
-	 */
-	public function register(Application $application)
-	{
-		$application->onError[] = $this;
-	}
-
 }

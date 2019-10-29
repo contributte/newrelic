@@ -70,12 +70,4 @@ class OnRequestCallback
 		newrelic_disable_autorum();
 	}
 
-	/**
-	 * @param \Nette\Application\Application $application
-	 */
-	public function register(Application $application)
-	{
-		$application->onRequest[] = $this;
-	}
-
 }

@@ -160,13 +160,14 @@ class Extension extends \Nette\DI\CompilerExtension
 		$license = isset($config['license']) ? $config['license'] : NULL;
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
-			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', [
+			->setFactory('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', [
 				$map,
 				$license,
 				isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
-			])
-			->addSetup('register', ['@\Nette\Application\Application'])
-			->addTag('run', TRUE);
+			]);
+
+		$application = $builder->getDefinition('application');
+		$application->addSetup('$service->onRequest[] = ?', ['@' . $this->prefix('onRequestCallback')]);
 	}
 
 	private function setupApplicationOnError()
@@ -174,9 +175,10 @@ class Extension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnErrorCallback')
-			->addSetup('register', ['@\Nette\Application\Application'])
-			->addTag('run', TRUE);
+			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnErrorCallback');
+
+		$application = $builder->getDefinition('application');
+		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
 	}
 
 	private function setupCustom(Method $initialize)
@@ -215,13 +217,13 @@ class Extension extends \Nette\DI\CompilerExtension
 		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE;
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\User', [$rumEnabled]);
+			->setFactory('VrtakCZ\NewRelic\Nette\RUM\User', [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\HeaderControl', [$rumEnabled]);
+			->setFactory('VrtakCZ\NewRelic\Nette\RUM\HeaderControl', [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setClass('VrtakCZ\NewRelic\Nette\RUM\FooterControl', [$rumEnabled]);
+			->setFactory('VrtakCZ\NewRelic\Nette\RUM\FooterControl', [$rumEnabled]);
 	}
 
 }

@@ -4,14 +4,13 @@ sudo: false
 
 env:
   - NETTE=default
-  - NETTE=~2.4.0
-  - NETTE=~2.4.0 PREFER_LOWEST=true
+  - NETTE=~3.0.0
+  - NETTE=~3.0.0 PREFER_LOWEST=true
 
 php:
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
+  - 7.3
 
 matrix:
   fast_finish: true

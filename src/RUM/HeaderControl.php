@@ -16,7 +16,6 @@ class HeaderControl extends \Nette\Application\UI\Control
 	 */
 	public function __construct($enabled = TRUE)
 	{
-		parent::__construct();
 		$this->enabled = $enabled;
 	}
 

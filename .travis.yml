@@ -2,10 +2,9 @@ language: php
 
 sudo: false
 
-env:
-  - NETTE=default
-  - NETTE=~3.0.0
-  - NETTE=~3.0.0 PREFER_LOWEST=true
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 php:
   - 7.1
@@ -14,14 +13,16 @@ php:
 
 matrix:
   fast_finish: true
+  include:
+    - php: 7.1
+      env: COMPOSER_EXTRA_ARGS="--prefer-lowest --prefer-stable"
 
 before_install:
   - composer self-update
   - php .travis.composer.php
 
 install:
-  - composer install --no-interaction --prefer-source --ignore-platform-reqs
-  - if  [ $PREFER_LOWEST = 'true' ]; then composer update --prefer-lowest --prefer-stable --ignore-platform-reqs; fi
+  - travis_retry composer update --no-interaction --prefer-dist $COMPOSER_EXTRA_ARGS
 
 script:
   - vendor/bin/parallel-lint -e php,phpt src

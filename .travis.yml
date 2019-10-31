@@ -17,10 +17,6 @@ matrix:
     - php: 7.1
       env: COMPOSER_EXTRA_ARGS="--prefer-lowest --prefer-stable"
 
-before_install:
-  - composer self-update
-  - php .travis.composer.php
-
 install:
   - travis_retry composer update --no-interaction --prefer-dist $COMPOSER_EXTRA_ARGS
 

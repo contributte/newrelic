@@ -24,14 +24,15 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"VrtakCZ\\NewRelic\\Nette\\": "src/"
+			"VrtakCZ\\NewRelic\\Nette\\": "src/",
+			"VrtakCZ\\NewRelic\\Tracy\\": "src/Tracy/"
 		}
 	},
 	"require": {
 		"php": ">=7.1",
 		"nette/di": "~3.0",
 		"nette/application": "~3.0",
-		"vrtak-cz/newrelic-tracy": "^8.0"
+		"tracy/tracy": "~2.7"
 	},
 	"require-dev": {
 		"jakub-onderka/php-console-highlighter": "0.3.2",

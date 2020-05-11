@@ -6,13 +6,13 @@
 [![Composer Downloads](https://img.shields.io/packagist/dt/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
 
 ## Versions
+
 | State  | Version | Branch |  Nette |     PHP |
 |--------|--------:|--------|-------:|--------:|
 | stable |  `^8.0` | master | `^3.0` | `>=7.1` |
 | stable |  `^7.0` | master | `^2.4` | `>=5.6` |
 
-Installation
-------------
+### Installation
 
 ```
 composer require vrtak-cz/newrelic-nette
@@ -25,8 +25,7 @@ extensions:
     newrelic: VrtakCZ\NewRelic\Nette\Extension
 ```
 
-Config
-------
+### Config
 
 ```yaml
 newrelic:
@@ -60,8 +59,7 @@ newrelic:
         paramName: paramValue
 ```
 
-Realtime User Monitoring
-------------------------
+### Realtime User Monitoring
 
 add this component factory to your base presenter
 
@@ -101,6 +99,20 @@ and add this to your `@layout` footer (before `</body>`)
 
 ```smarty
 {control newRelicFooter}
+```
+
+### Tracy
+
+```php
+$logLevel = [ // default (NULL means default)
+    \Tracy\Logger::CRITICAL,
+    \Tracy\Logger::EXCEPTION,
+    \Tracy\Logger::ERROR,
+];
+$appName = 'PHP Application'; // default (NULL means default)
+$license = 'your_licence_key';
+
+\VrtakCZ\NewRelic\Tracy\Bootstrap::init($logLevel, $appName, $license); // all parameters are optional
 ```
 
 License

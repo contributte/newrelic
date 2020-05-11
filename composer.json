@@ -1,20 +1,26 @@
 {
-	"name": "vrtak-cz/newrelic-nette",
-	"description": "NewRelic PHP agent integration for Nette Framework",
+	"name": "contributte/newrelic",
 	"type": "library",
-	"keywords": ["nette", "newrelic"],
+	"description": "NewRelic PHP agent integration for Nette Framework",
+	"keywords": ["nette", "newrelic", "monitoring"],
+	"homepage": "https://github.com/contributte/newrelic",
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "Patrik Votoček",
-			"email": "patrik@votocek.cz",
-			"homepage": "http://patrik.votocek.cz",
-			"role": "Developer"
+			"homepage": "http://patrik.votocek.cz"
+		},
+		{
+			"name": "Milan Felix Šulc",
+			"homepage": "https://f3l1x.io"
+		},
+		{
+			"name": "Tomáš Jacík",
+			"homepage": "https://tomasjacik.cz"
 		}
 	],
 	"support": {
-		"issues":"https://github.com/Vrtak-CZ/NewRelic-Nette/issues",
-		"source":"https://github.com/Vrtak-CZ/NewRelic-Nette"
+		"issues": "https://github.com/contributte/newrelic/issues"
 	},
 	"autoload": {
 		"psr-4": {
@@ -35,10 +41,7 @@
 	"archive": {
 		"exclude": [
 			".gitignore",
-			"/.travis.yml",
-			"/.travis.composer.php"
+			"/.travis.yml"
 		]
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true
+	}
 }

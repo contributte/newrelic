@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\Callbacks;
 
 use Nette\Application\Application;
+use Nette\Application\BadRequestException;
 
 class OnErrorCallback
 {
@@ -13,7 +16,7 @@ class OnErrorCallback
 	 */
 	public function __invoke(Application $application, $e)
 	{
-		if ($e instanceof \Nette\Application\BadRequestException) { // skip 4xx errors
+		if ($e instanceof BadRequestException) { // skip 4xx errors
 			return;
 		}
 

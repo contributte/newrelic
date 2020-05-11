@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\RUM;
 
 class User
 {
 
-	/** @var bool */
+	/**
+	 * @var bool
+	 */
 	private $enabled;
 
 	/**
 	 * @param bool $enabled
 	 */
-	public function __construct($enabled = TRUE)
+	public function __construct($enabled = true)
 	{
 		$this->enabled = $enabled;
 	}
@@ -27,6 +31,7 @@ class User
 		if ($this->enabled) {
 			newrelic_set_user_attributes($user, $account, $product);
 		}
+
 		return $this;
 	}
 

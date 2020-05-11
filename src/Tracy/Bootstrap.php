@@ -1,6 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\Tracy;
+
+use Tracy\Debugger;
+use Tracy\Logger;
 
 class Bootstrap
 {
@@ -10,7 +15,7 @@ class Bootstrap
 	 * @param string|NULL $appName
 	 * @param string|NULL $license
 	 */
-	public static function init(array $logLevel = NULL, $appName = NULL, $license = NULL)
+	public static function init(?array $logLevel = null, $appName = null, $license = null)
 	{
 		static::check();
 
@@ -18,22 +23,22 @@ class Bootstrap
 			return;
 		}
 
-		if ($appName === NULL) {
+		if ($appName === null) {
 			$appName = 'PHP Application';
 		}
 
 		static::setup($appName, $license);
 
-		if ($logLevel === NULL) {
+		if ($logLevel === null) {
 			$logLevel = [
-				\Tracy\Logger::CRITICAL,
-				\Tracy\Logger::EXCEPTION,
-				\Tracy\Logger::ERROR,
+				Logger::CRITICAL,
+				Logger::EXCEPTION,
+				Logger::ERROR,
 			];
 		}
 
 		$logger = new Logger($logLevel);
-		\Tracy\Debugger::setLogger($logger);
+		Debugger::setLogger($logger);
 	}
 
 	/**
@@ -48,9 +53,9 @@ class Bootstrap
 	 * @param string $appName
 	 * @param string|null $license
 	 */
-	public static function setup($appName, $license = NULL)
+	public static function setup($appName, $license = null)
 	{
-		if ($license === NULL) {
+		if ($license === null) {
 			newrelic_set_appname($appName);
 		} else {
 			newrelic_set_appname($appName, $license);

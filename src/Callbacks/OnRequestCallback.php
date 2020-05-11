@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\Callbacks;
 
+use Contributte\NewRelic\Tracy\Bootstrap;
 use Nette\Application\Application;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
@@ -10,13 +13,19 @@ use Nette\Utils\Strings;
 class OnRequestCallback
 {
 
-	/** @var array */
+	/**
+	 * @var array
+	 */
 	private $map;
 
-	/** @var string */
+	/**
+	 * @var string
+	 */
 	private $license;
 
-	/** @var string */
+	/**
+	 * @var string
+	 */
 	private $actionKey;
 
 	/**
@@ -38,7 +47,7 @@ class OnRequestCallback
 	public function __invoke(Application $application, Request $request)
 	{
 		if (PHP_SAPI === 'cli') {
-			newrelic_background_job(TRUE);
+			newrelic_background_job(true);
 		}
 
 		$params = $request->getParameters();
@@ -47,20 +56,22 @@ class OnRequestCallback
 			$action = sprintf('%s:%s', $action, $params[$this->actionKey]);
 		}
 
-		if (!empty($this->map)) {
+		if (!$this->map) {
 			foreach ($this->map as $pattern => $appName) {
 				if ($pattern === '*') {
 					continue;
 				}
+
 				if (Strings::endsWith($pattern, '*')) {
 					$pattern = Strings::substring($pattern, 0, -1);
 				}
+
 				if (Strings::startsWith($pattern, ':')) {
 					$pattern = Strings::substring($pattern, 1);
 				}
 
 				if (Strings::startsWith($action, $pattern)) {
-					\Contributte\NewRelic\Tracy\Bootstrap::setup($appName, $this->license);
+					Bootstrap::setup($appName, $this->license);
 					break;
 				}
 			}

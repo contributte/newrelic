@@ -1,20 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\RUM;
 
-class HeaderControl extends \Nette\Application\UI\Control
+use Nette\Application\UI\Control;
+
+class HeaderControl extends Control
 {
 
-	/** @var bool */
+	/**
+	 * @var bool
+	 */
 	private $enabled;
 
-	/** @var bool */
-	private $withScriptTag = TRUE;
+	/**
+	 * @var bool
+	 */
+	private $withScriptTag = true;
 
 	/**
 	 * @param bool $enabled
 	 */
-	public function __construct($enabled = TRUE)
+	public function __construct($enabled = true)
 	{
 		$this->enabled = $enabled;
 	}
@@ -24,7 +32,7 @@ class HeaderControl extends \Nette\Application\UI\Control
 	 */
 	public function disableScriptTag()
 	{
-		$this->withScriptTag = FALSE;
+		$this->withScriptTag = false;
 		return $this;
 	}
 

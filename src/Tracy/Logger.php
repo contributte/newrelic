@@ -1,14 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\Tracy;
 
-class Logger implements \Tracy\ILogger
+use Tracy\Debugger;
+use Tracy\ILogger;
+
+class Logger implements ILogger
 {
 
-	/** @var \Tracy\ILogger */
+	/**
+	 * @var \Tracy\ILogger
+	 */
 	private $oldLogger;
 
-	/** @var string[] */
+	/**
+	 * @var string[]
+	 */
 	private $logLevels;
 
 	/**
@@ -16,7 +25,7 @@ class Logger implements \Tracy\ILogger
 	 */
 	public function __construct(array $logLevels)
 	{
-		$this->oldLogger = \Tracy\Debugger::getLogger();
+		$this->oldLogger = Debugger::getLogger();
 		$this->logLevels = $logLevels;
 	}
 
@@ -25,7 +34,7 @@ class Logger implements \Tracy\ILogger
 	 * @param string $priority
 	 * @return string logged error filename
 	 */
-	public function log($message, $priority = NULL)
+	public function log($message, $priority = null)
 	{
 		$exceptionFile = $this->oldLogger->log($message, $priority);
 

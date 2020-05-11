@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\Tracy\Custom;
+
+use Contributte\NewRelic\Tracy\Bootstrap;
 
 class Parameters
 {
@@ -11,7 +15,7 @@ class Parameters
 	 */
 	public static function addParameter($name, $value)
 	{
-		if (\Contributte\NewRelic\Tracy\Bootstrap::isEnabled()) {
+		if (Bootstrap::isEnabled()) {
 			newrelic_add_custom_parameter($name, $value);
 		}
 	}

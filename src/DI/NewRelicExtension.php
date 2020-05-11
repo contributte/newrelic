@@ -1,46 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contributte\NewRelic\DI;
 
+use Contributte\NewRelic\Callbacks\OnErrorCallback;
+use Contributte\NewRelic\Callbacks\OnRequestCallback;
+use Contributte\NewRelic\RUM\FooterControl;
+use Contributte\NewRelic\RUM\HeaderControl;
+use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Bootstrap;
 use Nette\Application\UI\Presenter;
+use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
+use Tracy\Logger;
 
-class NewRelicExtension extends \Nette\DI\CompilerExtension
+class NewRelicExtension extends CompilerExtension
 {
 
-	/** @var bool */
+	/**
+	 * @var bool
+	 */
 	private $skipIfIsDisabled;
 
-	/** @var bool */
-	private $enabled = TRUE;
+	/**
+	 * @var bool
+	 */
+	private $enabled = true;
 
-	/** @var array */
+	/**
+	 * @var array
+	 */
 	public $defaults = [
 		'logLevel' => [
-			\Tracy\Logger::CRITICAL,
-			\Tracy\Logger::EXCEPTION,
-			\Tracy\Logger::ERROR,
+			Logger::CRITICAL,
+			Logger::EXCEPTION,
+			Logger::ERROR,
 		],
 		'rum' => [
 			'enabled' => 'auto',
 		],
 		'transactionTracer' => [
-			'enabled' => TRUE,
+			'enabled' => true,
 			'detail' => 1,
 			'recordSql' => 'obfuscated',
-			'slowSql' => TRUE,
+			'slowSql' => true,
 			'threshold' => 'apdex_f',
 			'stackTraceThreshold' => 500,
 			'explainThreshold' => 500,
 		],
 		'errorCollector' => [
-			'enabled' => TRUE,
-			'recordDatabaseErrors' => TRUE,
+			'enabled' => true,
+			'recordDatabaseErrors' => true,
 		],
 		'parameters' => [
-			'capture' => FALSE,
+			'capture' => false,
 			'ignored' => [],
 		],
 	];
@@ -48,7 +63,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 	/**
 	 * @param bool $skipIfIsDisabled
 	 */
-	public function __construct($skipIfIsDisabled = FALSE)
+	public function __construct($skipIfIsDisabled = false)
 	{
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
 	}
@@ -57,11 +72,11 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 	{
 		$config = $this->getConfig();
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
-			$this->enabled = FALSE;
+			$this->enabled = false;
 		}
 
 		if (isset($config['enabled']) && !$config['enabled']) {
-			$this->enabled = FALSE;
+			$this->enabled = false;
 		}
 
 		$this->setupRUM();
@@ -95,15 +110,16 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 		if (isset($config['appName']) && !is_array($config['appName'])) {
 			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName'],
-				isset($config['license']) ? $config['license'] : NULL,
+				$config['license'] ?? null,
 			]);
 		} elseif (isset($config['appName']) && is_array($config['appName'])) {
 			if (!isset($config['appName']['*'])) {
 				throw new \RuntimeException('Missing default app name as "*"');
 			}
+
 			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName']['*'],
-				isset($config['license']) ? $config['license'] : NULL,
+				$config['license'] ?? null,
 			]);
 		}
 
@@ -118,6 +134,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 		if ($config['rum']['enabled'] !== 'auto') {
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
+
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", [
 			(string) $config['transactionTracer']['enabled'],
 		]);
@@ -158,14 +175,14 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$map = (isset($config['appName']) && is_array($config['appName'])) ? $config['appName'] : [];
-		$license = isset($config['license']) ? $config['license'] : NULL;
+		$map = isset($config['appName']) && is_array($config['appName']) ? $config['appName'] : [];
+		$license = $config['license'] ?? null;
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
-			->setFactory(\Contributte\NewRelic\Callbacks\OnRequestCallback::class, [
+			->setFactory(OnRequestCallback::class, [
 				$map,
 				$license,
-				isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
+				$config['actionKey'] ?? Presenter::ACTION_KEY,
 			]);
 
 		$application = $builder->getDefinition('application');
@@ -177,7 +194,7 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass(\Contributte\NewRelic\Callbacks\OnErrorCallback::class);
+			->setClass(OnErrorCallback::class);
 
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
@@ -216,16 +233,16 @@ class NewRelicExtension extends \Nette\DI\CompilerExtension
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE;
+		$rumEnabled = $this->enabled && $config['rum']['enabled'] === true;
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setFactory(\Contributte\NewRelic\RUM\User::class, [$rumEnabled]);
+			->setFactory(User::class, [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setFactory(\Contributte\NewRelic\RUM\HeaderControl::class, [$rumEnabled]);
+			->setFactory(HeaderControl::class, [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setFactory(\Contributte\NewRelic\RUM\FooterControl::class, [$rumEnabled]);
+			->setFactory(FooterControl::class, [$rumEnabled]);
 	}
 
 }

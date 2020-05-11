@@ -10,6 +10,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 matrix:
   fast_finish: true
@@ -21,5 +22,5 @@ install:
   - travis_retry composer update --no-interaction --prefer-dist $COMPOSER_EXTRA_ARGS
 
 script:
-  - vendor/bin/parallel-lint -e php,phpt src
-  - vendor/bin/phpcs -sp --standard=vendor/nella/coding-standard/Nella/ruleset.xml src
+  - composer lint
+  - composer cs

@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Tracy;
+namespace Contributte\NewRelic\Tracy;
 
 class Logger implements \Tracy\ILogger
 {

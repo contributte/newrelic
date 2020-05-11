@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Tracy\Custom;
+namespace Contributte\NewRelic\Tracy\Custom;
 
 class Tracers
 {
@@ -10,7 +10,7 @@ class Tracers
 	 */
 	public static function addTracer($function)
 	{
-		if (\VrtakCZ\NewRelic\Tracy\Bootstrap::isEnabled()) {
+		if (\Contributte\NewRelic\Tracy\Bootstrap::isEnabled()) {
 			newrelic_add_custom_tracer($function);
 		}
 	}

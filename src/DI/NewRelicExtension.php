@@ -1,13 +1,13 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Nette;
+namespace Contributte\NewRelic\DI;
 
+use Contributte\NewRelic\Tracy\Bootstrap;
 use Nette\Application\UI\Presenter;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
-use VrtakCZ\NewRelic\Tracy\Bootstrap;
 
-class Extension extends \Nette\DI\CompilerExtension
+class NewRelicExtension extends \Nette\DI\CompilerExtension
 {
 
 	/** @var bool */
@@ -72,7 +72,9 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		if (!extension_loaded('newrelic')) {
 			throw new \RuntimeException('NewRelic extension is not loaded');
-		} elseif (!Bootstrap::isEnabled()) {
+		}
+
+		if (!Bootstrap::isEnabled()) {
 			throw new \RuntimeException('NewRelic is not enabled');
 		}
 
@@ -91,7 +93,7 @@ class Extension extends \Nette\DI\CompilerExtension
 
 		// AppName and license
 		if (isset($config['appName']) && !is_array($config['appName'])) {
-			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
+			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName'],
 				isset($config['license']) ? $config['license'] : NULL,
 			]);
@@ -99,14 +101,14 @@ class Extension extends \Nette\DI\CompilerExtension
 			if (!isset($config['appName']['*'])) {
 				throw new \RuntimeException('Missing default app name as "*"');
 			}
-			$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
+			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config['appName']['*'],
 				isset($config['license']) ? $config['license'] : NULL,
 			]);
 		}
 
 		// Logger
-		$initialize->addBody('\Tracy\Debugger::setLogger(new \VrtakCZ\NewRelic\Tracy\Logger(?));', [
+		$initialize->addBody('\Tracy\Debugger::setLogger(new \Contributte\NewRelic\Tracy\Logger(?));', [
 			array_unique($config['logLevel']),
 		]);
 
@@ -160,7 +162,7 @@ class Extension extends \Nette\DI\CompilerExtension
 		$license = isset($config['license']) ? $config['license'] : NULL;
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
-			->setFactory('VrtakCZ\NewRelic\Nette\Callbacks\OnRequestCallback', [
+			->setFactory(\Contributte\NewRelic\Callbacks\OnRequestCallback::class, [
 				$map,
 				$license,
 				isset($config['actionKey']) ? $config['actionKey'] : Presenter::ACTION_KEY,
@@ -175,7 +177,7 @@ class Extension extends \Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass('VrtakCZ\NewRelic\Nette\Callbacks\OnErrorCallback');
+			->setClass(\Contributte\NewRelic\Callbacks\OnErrorCallback::class);
 
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
@@ -191,7 +193,7 @@ class Extension extends \Nette\DI\CompilerExtension
 			}
 
 			foreach ($config['custom']['parameters'] as $name => $value) {
-				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
+				$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
 					$name,
 					$value,
 				]);
@@ -204,7 +206,7 @@ class Extension extends \Nette\DI\CompilerExtension
 			}
 
 			foreach ($config['custom']['tracers'] as $function) {
-				$initialize->addBody('\VrtakCZ\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
+				$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
 			}
 		}
 	}
@@ -217,13 +219,13 @@ class Extension extends \Nette\DI\CompilerExtension
 		$rumEnabled = $this->enabled && $config['rum']['enabled'] === TRUE;
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setFactory('VrtakCZ\NewRelic\Nette\RUM\User', [$rumEnabled]);
+			->setFactory(\Contributte\NewRelic\RUM\User::class, [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setFactory('VrtakCZ\NewRelic\Nette\RUM\HeaderControl', [$rumEnabled]);
+			->setFactory(\Contributte\NewRelic\RUM\HeaderControl::class, [$rumEnabled]);
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setFactory('VrtakCZ\NewRelic\Nette\RUM\FooterControl', [$rumEnabled]);
+			->setFactory(\Contributte\NewRelic\RUM\FooterControl::class, [$rumEnabled]);
 	}
 
 }

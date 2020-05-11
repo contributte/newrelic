@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Nette\RUM;
+namespace Contributte\NewRelic\RUM;
 
 class FooterControl extends \Nette\Application\UI\Control
 {
@@ -20,7 +20,7 @@ class FooterControl extends \Nette\Application\UI\Control
 	}
 
 	/**
-	 * @return HeaderControl
+	 * @return FooterControl
 	 */
 	public function disableScriptTag()
 	{

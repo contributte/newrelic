@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Nette\Callbacks;
+namespace Contributte\NewRelic\Callbacks;
 
 use Nette\Application\Application;
 use Nette\Application\Request;
@@ -60,7 +60,7 @@ class OnRequestCallback
 				}
 
 				if (Strings::startsWith($action, $pattern)) {
-					\VrtakCZ\NewRelic\Tracy\Bootstrap::setup($appName, $this->license);
+					\Contributte\NewRelic\Tracy\Bootstrap::setup($appName, $this->license);
 					break;
 				}
 			}

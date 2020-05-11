@@ -15,14 +15,14 @@
 ### Installation
 
 ```
-composer require vrtak-cz/newrelic-nette
+composer require contributte\newrelic
 ```
 
 edit `app/config/config.neon`
 
 ```yaml
 extensions:
-    newrelic: VrtakCZ\NewRelic\Nette\Extension
+    newrelic: Contributte\NewRelic\DI\NewRelicExtension
 ```
 
 ### Config
@@ -65,13 +65,13 @@ add this component factory to your base presenter
 
 ```php
 /**
- * @var \VrtakCZ\NewRelic\Nette\RUM\HeaderControl
+ * @var \Contributte\NewRelic\RUM\HeaderControl
  * @inject
  */
 protected $headerControl;
 
 /**
- * @var \VrtakCZ\NewRelic\Nette\RUM\FooterControl
+ * @var \Contributte\NewRelic\RUM\FooterControl
  * @inject
  */
 protected $footerControl;
@@ -112,9 +112,9 @@ $logLevel = [ // default (NULL means default)
 $appName = 'PHP Application'; // default (NULL means default)
 $license = 'your_licence_key';
 
-\VrtakCZ\NewRelic\Tracy\Bootstrap::init($logLevel, $appName, $license); // all parameters are optional
+\Contributte\NewRelic\Tracy\Bootstrap::init($logLevel, $appName, $license); // all parameters are optional
 ```
 
 License
 -------
-NewRelic Nette is licensed under the MIT License - see the LICENSE file for details
+NewRelic Nette extension is licensed under the MIT License - see the LICENSE file for details

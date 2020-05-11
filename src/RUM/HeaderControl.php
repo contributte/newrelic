@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Nette\RUM;
+namespace Contributte\NewRelic\RUM;
 
 class HeaderControl extends \Nette\Application\UI\Control
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace VrtakCZ\NewRelic\Tracy\Custom;
+namespace Contributte\NewRelic\Tracy\Custom;
 
 class Metrics
 {
@@ -11,7 +11,7 @@ class Metrics
 	 */
 	public static function addMetric($name, $value)
 	{
-		if (\VrtakCZ\NewRelic\Tracy\Bootstrap::isEnabled()) {
+		if (\Contributte\NewRelic\Tracy\Bootstrap::isEnabled()) {
 			newrelic_custom_metric('Custom/' . $name, $value);
 		}
 	}

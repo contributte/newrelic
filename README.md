@@ -1,9 +1,6 @@
-[NewRelic](http://newrelic.com) PHP agent integration for [Nette Framework](http://nette.org)
-=============================================================================================
+# [NewRelic](http://newrelic.com) PHP agent integration
 
-[![Build Status](https://img.shields.io/travis/Vrtak-CZ/NewRelic-Nette.svg?style=flat-square)](https://travis-ci.org/Vrtak-CZ/NewRelic-Nette)
-[![Latest Stable Version](https://img.shields.io/packagist/v/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
-[![Composer Downloads](https://img.shields.io/packagist/dt/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
+![QA](https://github.com/contributte/newrelic/workflows/QA/badge.svg?branch=master)
 
 ## Documentation
 

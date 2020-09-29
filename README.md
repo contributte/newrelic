@@ -5,6 +5,13 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
 [![Composer Downloads](https://img.shields.io/packagist/dt/vrtak-cz/newrelic-nette.svg?style=flat-square)](https://packagist.org/packages/vrtak-cz/newrelic-nette)
 
+## Documentation
+
+- [Setup](.docs/README.md#setup)
+- [Usage](.docs/README.md#usage)
+- [Realtime User Monitoring](.docs/README.md#realtime-user-monitoring)
+- [Tracy](.docs/README.md#tracy)
+
 ## Versions
 
 | State  | Version | Branch |  Nette |     PHP |
@@ -12,109 +19,41 @@
 | stable |  `^8.0` | master | `^3.0` | `>=7.1` |
 | stable |  `^7.0` | master | `^2.4` | `>=5.6` |
 
-### Installation
+## Maintainers
 
-```
-composer require contributte\newrelic
-```
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/foxycode">
+            <img width="150" height="150" src="https://avatars2.githubusercontent.com/u/1284781?s=460&v=4">
+        </a>
+        </br>
+        <a href="https://github.com/foxycode">Tomáš Jacík</a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/f3l1x">
+            <img width="150" height="150" src="https://avatars2.githubusercontent.com/u/538058?v=3&s=150">
+        </a>
+        </br>
+        <a href="https://github.com/f3l1x">Milan Felix Šulc</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-edit `app/config/config.neon`
+### Former maintainers
 
-```yaml
-extensions:
-    newrelic: Contributte\NewRelic\DI\NewRelicExtension
-```
-
-### Config
-
-```yaml
-newrelic:
-    enabled: Yes #default
-    appName: YourApplicationName #optional
-    license: yourLicenseCode #optional
-    actionKey: action # default - optional - action parameter name
-    logLevel: #defaults
-        - critical
-        - exception
-        - error
-
-    # optional options with default values
-    rum:
-        enabled: auto # other options are Yes/No
-    transactionTracer:
-        enabled: Yes
-        detail: 1
-        recordSql: obfuscated
-        slowSql: Yes
-        threshold: apdex_f
-        stackTraceThreshold: 500
-        explainThreshold: 500
-    errorCollector:
-        enabled: Yes
-        recordDatabaseErrors: Yes
-    parameters:
-        capture: No
-        ignored: []
-    customParameters:
-        paramName: paramValue
-```
-
-### Realtime User Monitoring
-
-add this component factory to your base presenter
-
-```php
-/**
- * @var \Contributte\NewRelic\RUM\HeaderControl
- * @inject
- */
-protected $headerControl;
-
-/**
- * @var \Contributte\NewRelic\RUM\FooterControl
- * @inject
- */
-protected $footerControl;
-
-protected function createComponentNewRelicHeader()
-{
-    $this->headerControl->disableScriptTag(); // optional
-    return $this->headerControl;
-}
-
-protected function createComponentNewRelicFooter()
-{
-    $this->footerControl->disableScriptTag(); // optional
-    return $this->footerControl;
-}
-```
-
-and add this to your `@layout` header (before `</head>`)
-
-```smarty
-{control newRelicHeader}
-```
-
-and add this to your `@layout` footer (before `</body>`)
-
-```smarty
-{control newRelicFooter}
-```
-
-### Tracy
-
-```php
-$logLevel = [ // default (NULL means default)
-    \Tracy\Logger::CRITICAL,
-    \Tracy\Logger::EXCEPTION,
-    \Tracy\Logger::ERROR,
-];
-$appName = 'PHP Application'; // default (NULL means default)
-$license = 'your_licence_key';
-
-\Contributte\NewRelic\Tracy\Bootstrap::init($logLevel, $appName, $license); // all parameters are optional
-```
-
-License
--------
-NewRelic Nette extension is licensed under the MIT License - see the LICENSE file for details
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/Vrtak-CZ">
+            <img width="150" height="150" src="https://avatars0.githubusercontent.com/u/112567?s=460&v=4">
+        </a>
+        </br>
+        <a href="http://patrik.votocek.cz">Patrik Votoček</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

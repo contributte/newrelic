@@ -26,7 +26,7 @@ extensions:
 
 ```yaml
 newrelic:
-  enabled: Yes #default
+  enabled: true #default
   appName: YourApplicationName #optional
   license: yourLicenseCode #optional
   actionKey: action # default - optional - action parameter name
@@ -37,23 +37,25 @@ newrelic:
 
   # optional options with default values
   rum:
-    enabled: auto # other options are Yes/No
+    enabled: auto # other options are true/false
   transactionTracer:
-    enabled: Yes
+    enabled: true
     detail: 1
     recordSql: obfuscated
-    slowSql: Yes
+    slowSql: true
     threshold: apdex_f
     stackTraceThreshold: 500
     explainThreshold: 500
   errorCollector:
-    enabled: Yes
+    enabled: true
     recordDatabaseErrors: Yes
   parameters:
-    capture: No
+    capture: false
     ignored: []
-  customParameters:
-    paramName: paramValue
+  custom:
+    parameters:
+      paramName: paramValue
+    tracers:
 ```
 
 ## Realtime User Monitoring

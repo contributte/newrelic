@@ -30,7 +30,7 @@
 	},
 	"require-dev": {
 		"php-parallel-lint/php-parallel-lint": "^1.2",
-		"ninjify/coding-standard": "^0.9.0"
+		"ninjify/coding-standard": "^0.10.0"
 	},
 	"autoload": {
 		"psr-4": {

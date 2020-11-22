@@ -14,6 +14,8 @@ use Nette\Application\UI\Presenter;
 use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Tracy\Logger;
 
 class NewRelicExtension extends CompilerExtension
@@ -30,42 +32,54 @@ class NewRelicExtension extends CompilerExtension
 	private $enabled = true;
 
 	/**
-	 * @var array
-	 */
-	public $defaults = [
-		'logLevel' => [
-			Logger::CRITICAL,
-			Logger::EXCEPTION,
-			Logger::ERROR,
-		],
-		'rum' => [
-			'enabled' => 'auto',
-		],
-		'transactionTracer' => [
-			'enabled' => true,
-			'detail' => 1,
-			'recordSql' => 'obfuscated',
-			'slowSql' => true,
-			'threshold' => 'apdex_f',
-			'stackTraceThreshold' => 500,
-			'explainThreshold' => 500,
-		],
-		'errorCollector' => [
-			'enabled' => true,
-			'recordDatabaseErrors' => true,
-		],
-		'parameters' => [
-			'capture' => false,
-			'ignored' => [],
-		],
-	];
-
-	/**
 	 * @param bool $skipIfIsDisabled
 	 */
 	public function __construct($skipIfIsDisabled = false)
 	{
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
+	}
+
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'enabled' => Expect::bool(true),
+			'appName' => Expect::type('string|array'),
+			'license' => Expect::string(),
+			'actionKey' => Expect::string(),
+			'logLevel' => Expect::listOf(Expect::string(Expect::anyOf([
+				Logger::CRITICAL,
+				Logger::EXCEPTION,
+				Logger::ERROR,
+			])))->default([
+				Logger::CRITICAL,
+				Logger::EXCEPTION,
+				Logger::ERROR,
+			]),
+			'rum' => Expect::structure([
+				'enabled' => Expect::string('auto'),
+			]),
+			'transactionTracer' => Expect::structure([
+				'enabled' => Expect::bool(true),
+				'detail' => Expect::int(1),
+				'recordSql' => Expect::string('obfuscated'),
+				'slowSql' => Expect::bool(true),
+				'threshold' => Expect::string('apdex_f'),
+				'stackTraceThreshold' => Expect::int(500),
+				'explainThreshold' => Expect::int(500),
+			]),
+			'errorCollector' => Expect::structure([
+				'enabled' => Expect::bool(true),
+				'recordDatabaseErrors' => Expect::bool(true),
+			]),
+			'parameters' => Expect::structure([
+				'capture' => Expect::bool(false),
+				'ignored' => Expect::array(),
+			]),
+			'custom' => Expect::structure([
+				'parameters' => Expect::array(),
+				'tracers' => Expect::array(),
+			]),
+		]);
 	}
 
 	public function loadConfiguration()
@@ -75,7 +89,7 @@ class NewRelicExtension extends CompilerExtension
 			$this->enabled = false;
 		}
 
-		if (isset($config['enabled']) && !$config['enabled']) {
+		if (!$config->enabled) {
 			$this->enabled = false;
 		}
 
@@ -103,70 +117,70 @@ class NewRelicExtension extends CompilerExtension
 			return;
 		}
 
-		$config = $this->getConfig($this->defaults);
+		$config = $this->getConfig();
 		$initialize = $class->getMethod('initialize');
 
 		// AppName and license
-		if (isset($config['appName']) && !is_array($config['appName'])) {
+		if ($config->appName && !is_array($config->appName)) {
 			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
-				$config['appName'],
-				$config['license'] ?? null,
+				$config->appName,
+				$config->license,
 			]);
-		} elseif (isset($config['appName']) && is_array($config['appName'])) {
-			if (!isset($config['appName']['*'])) {
+		} elseif ($config->appName && is_array($config->appName)) {
+			if (!isset($config->appName['*'])) {
 				throw new \RuntimeException('Missing default app name as "*"');
 			}
 
 			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
-				$config['appName']['*'],
-				$config['license'] ?? null,
+				$config->appName['*'],
+				$config->license,
 			]);
 		}
 
 		// Logger
 		$initialize->addBody('\Tracy\Debugger::setLogger(new \Contributte\NewRelic\Tracy\Logger(?));', [
-			array_unique($config['logLevel']),
+			$config->logLevel,
 		]);
 
 		$this->setupCustom($initialize);
 
 		// Options
-		if ($config['rum']['enabled'] !== 'auto') {
+		if ($config->rum->enabled !== 'auto') {
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
 
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", [
-			(string) $config['transactionTracer']['enabled'],
+			(string) $config->transactionTracer->enabled,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", [
-			(string) $config['transactionTracer']['detail'],
+			(string) $config->transactionTracer->detail,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", [
-			(string) $config['transactionTracer']['recordSql'],
+			(string) $config->transactionTracer->recordSql,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", [
-			(string) $config['transactionTracer']['slowSql'],
+			(string) $config->transactionTracer->slowSql,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", [
-			(string) $config['transactionTracer']['threshold'],
+			(string) $config->transactionTracer->threshold,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", [
-			(string) $config['transactionTracer']['stackTraceThreshold'],
+			(string) $config->transactionTracer->stackTraceThreshold,
 		]);
 		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", [
-			(string) $config['transactionTracer']['explainThreshold'],
+			(string) $config->transactionTracer->explainThreshold,
 		]);
 		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", [
-			(string) $config['errorCollector']['enabled'],
+			(string) $config->errorCollector->enabled,
 		]);
 		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", [
-			(string) $config['errorCollector']['recordDatabaseErrors'],
+			(string) $config->errorCollector->recordDatabaseErrors,
 		]);
 		$initialize->addBody('newrelic_capture_params(?);', [
-			$config['parameters']['capture'],
+			$config->parameters->capture,
 		]);
 		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", [
-			implode(',', $config['parameters']['ignored']),
+			implode(',', $config->parameters->ignored),
 		]);
 	}
 
@@ -175,14 +189,13 @@ class NewRelicExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$map = isset($config['appName']) && is_array($config['appName']) ? $config['appName'] : [];
-		$license = $config['license'] ?? null;
+		$map = $config->appName && is_array($config->appName) ? $config->appName : [];
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setFactory(OnRequestCallback::class, [
 				$map,
-				$license,
-				$config['actionKey'] ?? Presenter::ACTION_KEY,
+				$config->license,
+				$config->actionKey ?? Presenter::ACTION_KEY,
 			]);
 
 		$application = $builder->getDefinition('application');
@@ -194,7 +207,7 @@ class NewRelicExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setClass(OnErrorCallback::class);
+			->setFactory(OnErrorCallback::class);
 
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
@@ -204,36 +217,24 @@ class NewRelicExtension extends CompilerExtension
 	{
 		$config = $this->getConfig();
 
-		if (isset($config['custom']['parameters'])) {
-			if (!is_array($config['custom']['parameters'])) {
-				throw new \RuntimeException('Invalid custom parameters structure');
-			}
-
-			foreach ($config['custom']['parameters'] as $name => $value) {
-				$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
-					$name,
-					$value,
-				]);
-			}
+		foreach ($config->custom->parameters as $name => $value) {
+			$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
+				$name,
+				$value,
+			]);
 		}
 
-		if (isset($config['custom']['tracers'])) {
-			if (!is_array($config['custom']['tracers'])) {
-				throw new \RuntimeException('Invalid custom tracers structure');
-			}
-
-			foreach ($config['custom']['tracers'] as $function) {
-				$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
-			}
+		foreach ($config->custom->tracers as $function) {
+			$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
 		}
 	}
 
 	private function setupRUM()
 	{
-		$config = $this->getConfig($this->defaults);
+		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && $config['rum']['enabled'] === true;
+		$rumEnabled = $this->enabled && $config->rum->enabled === true;
 
 		$builder->addDefinition($this->prefix('rum.user'))
 			->setFactory(User::class, [$rumEnabled]);

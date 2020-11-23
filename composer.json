@@ -30,17 +30,24 @@
 	},
 	"require-dev": {
 		"php-parallel-lint/php-parallel-lint": "^1.2",
-		"ninjify/coding-standard": "^0.10.0"
+		"ninjify/coding-standard": "^0.10.0",
+		"ninjify/nunjuck": "^0.3.0"
 	},
 	"autoload": {
 		"psr-4": {
 			"Contributte\\NewRelic\\": "src"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"ContributteTests\\NewRelic\\": "tests"
+		}
+	},
 	"scripts": {
 		"lint": "vendor/bin/parallel-lint -e php,phpt src",
 		"cs": "vendor/bin/phpcs --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src",
-		"csfix": "vendor/bin/phpcbf --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src"
+		"csfix": "vendor/bin/phpcbf --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src",
+		"tests": "vendor/bin/tester -s -p php --colors 1 -C tests/Cases"
 	},
 	"archive": {
 		"exclude": [

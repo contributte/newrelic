@@ -43,7 +43,7 @@ class NewRelicExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'enabled' => Expect::bool(true),
-			'appName' => Expect::type('string|array'),
+			'appName' => Expect::string(),
 			'license' => Expect::string(),
 			'actionKey' => Expect::string(),
 			'logLevel' => Expect::listOf(Expect::string(Expect::anyOf([
@@ -121,18 +121,9 @@ class NewRelicExtension extends CompilerExtension
 		$initialize = $class->getMethod('initialize');
 
 		// AppName and license
-		if ($config->appName && !is_array($config->appName)) {
+		if ($config->appName) {
 			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
 				$config->appName,
-				$config->license,
-			]);
-		} elseif ($config->appName && is_array($config->appName)) {
-			if (!isset($config->appName['*'])) {
-				throw new \RuntimeException('Missing default app name as "*"');
-			}
-
-			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
-				$config->appName['*'],
 				$config->license,
 			]);
 		}
@@ -189,12 +180,8 @@ class NewRelicExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$map = $config->appName && is_array($config->appName) ? $config->appName : [];
-
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setFactory(OnRequestCallback::class, [
-				$map,
-				$config->license,
 				$config->actionKey ?? Presenter::ACTION_KEY,
 			]);
 

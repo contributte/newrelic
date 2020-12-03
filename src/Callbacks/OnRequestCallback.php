@@ -56,7 +56,7 @@ class OnRequestCallback
 			$action = sprintf('%s:%s', $action, $params[$this->actionKey]);
 		}
 
-		if (!$this->map) {
+		if ($this->map) {
 			foreach ($this->map as $pattern => $appName) {
 				if ($pattern === '*') {
 					continue;

@@ -108,3 +108,31 @@ $license = 'your_licence_key';
 
 \Contributte\NewRelic\Tracy\Bootstrap::init($appName, $license); // all parameters are optional
 ```
+
+## Console
+This step is not necessary, but recommended as it will give you a nice formated data even for console commands.
+You will need to add two packages, [contributte/console](https://github.com/contributte/console) and [contributte/event-dispatcher](https://github.com/contributte/event-dispatcher).
+```bash
+composer require contributte/console
+```
+
+```yaml
+extensions:
+  console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+```
+
+```bash
+composer require contributte/event-dispatcher
+```
+
+```yaml
+extensions:
+  events: Contributte\EventDispatcher\DI\EventDispatcherExtension
+```
+
+Last step is registration of `NewRelicConsoleExtension`.
+
+```yaml
+extensions:
+  newrelic.console: Contributte\NewRelic\DI\NewRelicConsoleExtension
+```

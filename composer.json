@@ -49,6 +49,10 @@
 		"csfix": "vendor/bin/phpcbf --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src",
 		"tests": "vendor/bin/tester -s -p php --colors 1 -C tests/Cases"
 	},
+	"suggest": {
+		"contributte/console": "For a nice formated newrelic logs from console commands",
+		"contributte/event-dispatcher": "For a nice formated newrelic logs from console commands"
+	},
 	"archive": {
 		"exclude": [
 			".gitignore",

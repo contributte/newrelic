@@ -103,13 +103,8 @@ And add this to your `@layout` footer (before `</body>`):
 ## Tracy
 
 ```php
-$logLevel = [ // default (NULL means default)
-    \Tracy\Logger::CRITICAL,
-    \Tracy\Logger::EXCEPTION,
-    \Tracy\Logger::ERROR,
-];
 $appName = 'PHP Application'; // default (NULL means default)
 $license = 'your_licence_key';
 
-\Contributte\NewRelic\Tracy\Bootstrap::init($logLevel, $appName, $license); // all parameters are optional
+\Contributte\NewRelic\Tracy\Bootstrap::init($appName, $license); // all parameters are optional
 ```

@@ -11,11 +11,10 @@ class Bootstrap
 {
 
 	/**
-	 * @param string[]|array|NULL $logLevel (null for default - error and critical)
 	 * @param string|NULL $appName
 	 * @param string|NULL $license
 	 */
-	public static function init(?array $logLevel = null, $appName = null, $license = null)
+	public static function init($appName = null, $license = null)
 	{
 		static::check();
 
@@ -29,15 +28,7 @@ class Bootstrap
 
 		static::setup($appName, $license);
 
-		if ($logLevel === null) {
-			$logLevel = [
-				Logger::CRITICAL,
-				Logger::EXCEPTION,
-				Logger::ERROR,
-			];
-		}
-
-		$logger = new Logger($logLevel);
+		$logger = new Logger(null);
 		Debugger::setLogger($logger);
 	}
 

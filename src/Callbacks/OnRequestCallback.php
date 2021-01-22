@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Callbacks;
 
+use Contributte\NewRelic\Helpers;
 use Nette\Application\Application;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
@@ -38,6 +39,10 @@ class OnRequestCallback
 		$action = $request->getPresenterName();
 		if (isset($params[$this->actionKey])) {
 			$action = sprintf('%s:%s', $action, $params[$this->actionKey]);
+		}
+
+		if (PHP_SAPI === 'cli') {
+			$action = Helpers::getConsoleCommand();
 		}
 
 		newrelic_name_transaction($action);

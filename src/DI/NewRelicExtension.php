@@ -13,7 +13,6 @@ use Contributte\NewRelic\Config\TransactionTracerConfig;
 use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
-use Contributte\NewRelic\Tracy\Bootstrap;
 use Contributte\NewRelic\Tracy\Logger;
 use Nette\Application\UI\Presenter;
 use Nette\DI\CompilerExtension;
@@ -49,8 +48,8 @@ class NewRelicExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'enabled' => Expect::bool(true),
-			'appName' => Expect::string(),
-			'license' => Expect::string(),
+			'appName' => Expect::string('PHP Application'),
+			'license' => Expect::string(''),
 			'actionKey' => Expect::string(Presenter::ACTION_KEY),
 			'logLevel' => Expect::listOf(Expect::anyOf(
 				ILogger::CRITICAL,
@@ -74,7 +73,9 @@ class NewRelicExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
-		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
+		$enabled = (bool) ini_get('newrelic.enabled');
+
+		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !$enabled)) {
 			$this->enabled = false;
 		}
 
@@ -92,7 +93,7 @@ class NewRelicExtension extends CompilerExtension
 			throw new \RuntimeException('NewRelic extension is not loaded');
 		}
 
-		if (!Bootstrap::isEnabled()) {
+		if (!$enabled) {
 			throw new \RuntimeException('NewRelic is not enabled');
 		}
 
@@ -121,7 +122,8 @@ class NewRelicExtension extends CompilerExtension
 
 		// AppName and license
 		if ($config->appName) {
-			$initialize->addBody('\Contributte\NewRelic\Tracy\Bootstrap::setup(?, ?);', [
+			$initialize->addBody('$this->getService(?)->setAppName(?, ?);', [
+				$this->prefix('agent'),
 				$config->appName,
 				$config->license,
 			]);

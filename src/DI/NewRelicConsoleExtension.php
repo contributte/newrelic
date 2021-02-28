@@ -6,7 +6,6 @@ namespace Contributte\NewRelic\DI;
 
 use Contributte\Console\Application;
 use Contributte\NewRelic\Events\Listeners\ConsoleListener;
-use Contributte\NewRelic\Tracy\Bootstrap;
 use Nette\DI\CompilerExtension;
 use Nette\DI\ServiceCreationException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -38,7 +37,9 @@ class NewRelicConsoleExtension extends CompilerExtension
 		}
 
 		$config = $this->getConfig();
-		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
+		$enabled = (bool) ini_get('newrelic.enabled');
+
+		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !$enabled)) {
 			return;
 		}
 

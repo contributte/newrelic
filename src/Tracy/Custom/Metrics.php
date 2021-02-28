@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Tracy\Custom;
 
-use Contributte\NewRelic\Tracy\Bootstrap;
-
 class Metrics
 {
 
@@ -15,7 +13,7 @@ class Metrics
 	 */
 	public static function addMetric($name, $value)
 	{
-		if (Bootstrap::isEnabled()) {
+		if ((bool) ini_get('newrelic.enabled')) {
 			newrelic_custom_metric('Custom/' . $name, $value);
 		}
 	}

@@ -100,15 +100,6 @@ And add this to your `@layout` footer (before `</body>`):
 {control newRelicFooter}
 ```
 
-## Tracy
-
-```php
-$appName = 'PHP Application'; // default (NULL means default)
-$license = 'your_licence_key';
-
-\Contributte\NewRelic\Tracy\Bootstrap::init($appName, $license); // all parameters are optional
-```
-
 ## Console
 This step is not necessary, but recommended as it will give you a nice formated data even for console commands.
 You will need to add two packages, [contributte/console](https://github.com/contributte/console) and [contributte/event-dispatcher](https://github.com/contributte/event-dispatcher).

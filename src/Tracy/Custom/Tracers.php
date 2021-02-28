@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Tracy\Custom;
 
-use Contributte\NewRelic\Tracy\Bootstrap;
-
 class Tracers
 {
 
@@ -14,7 +12,7 @@ class Tracers
 	 */
 	public static function addTracer($function)
 	{
-		if (Bootstrap::isEnabled()) {
+		if ((bool) ini_get('newrelic.enabled')) {
 			newrelic_add_custom_tracer($function);
 		}
 	}

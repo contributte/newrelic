@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\DI;
 
+use Contributte\NewRelic\Agent\ProductionAgent;
 use Contributte\NewRelic\Callbacks\OnErrorCallback;
 use Contributte\NewRelic\Callbacks\OnRequestCallback;
 use Contributte\NewRelic\Config\ErrorCollectorConfig;
@@ -73,6 +74,7 @@ class NewRelicExtension extends CompilerExtension
 
 	public function loadConfiguration(): void
 	{
+		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
 			$this->enabled = false;
@@ -95,6 +97,9 @@ class NewRelicExtension extends CompilerExtension
 		if (!Bootstrap::isEnabled()) {
 			throw new \RuntimeException('NewRelic is not enabled');
 		}
+
+		$builder->addDefinition($this->prefix('agent'))
+			->setFactory(ProductionAgent::class);
 
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
@@ -141,6 +146,7 @@ class NewRelicExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setFactory(OnRequestCallback::class, [
+				'@' . $this->prefix('agent'),
 				$config->actionKey,
 			]);
 
@@ -153,7 +159,9 @@ class NewRelicExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('onErrorCallback'))
-			->setFactory(OnErrorCallback::class);
+			->setFactory(OnErrorCallback::class, [
+				'@' . $this->prefix('agent'),
+			]);
 
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
@@ -183,13 +191,22 @@ class NewRelicExtension extends CompilerExtension
 		$rumEnabled = $this->enabled && $config->rum->enabled === true;
 
 		$builder->addDefinition($this->prefix('rum.user'))
-			->setFactory(User::class, [$rumEnabled]);
+			->setFactory(User::class, [
+				'@' . $this->prefix('agent'),
+				$rumEnabled,
+			]);
 
 		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setFactory(HeaderControl::class, [$rumEnabled]);
+			->setFactory(HeaderControl::class, [
+				'@' . $this->prefix('agent'),
+				$rumEnabled,
+			]);
 
 		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setFactory(FooterControl::class, [$rumEnabled]);
+			->setFactory(FooterControl::class, [
+				'@' . $this->prefix('agent'),
+				$rumEnabled,
+			]);
 	}
 
 }

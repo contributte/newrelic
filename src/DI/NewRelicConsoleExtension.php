@@ -27,7 +27,7 @@ class NewRelicConsoleExtension extends CompilerExtension
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
 	}
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		if (!class_exists(Application::class)) {
 			throw new ServiceCreationException(sprintf('Missing "%s" service', Application::class));
@@ -49,12 +49,12 @@ class NewRelicConsoleExtension extends CompilerExtension
 		$this->setupConsoleListener();
 	}
 
-	private function setupConsoleListener()
+	private function setupConsoleListener(): void
 	{
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('consoleListener'))
-			->setClass(ConsoleListener::class);
+			->setFactory(ConsoleListener::class);
 	}
 
 }

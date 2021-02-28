@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Callbacks;
 
+use Contributte\NewRelic\Agent\Agent;
 use Contributte\NewRelic\Helpers;
 use Nette\Application\Application;
 use Nette\Application\Request;
@@ -13,26 +14,25 @@ class OnRequestCallback
 {
 
 	/**
+	 * @var Agent
+	 */
+	private $agent;
+
+	/**
 	 * @var string
 	 */
 	private $actionKey;
 
-	/**
-	 * @param string $actionKey
-	 */
-	public function __construct($actionKey = Presenter::ACTION_KEY)
+	public function __construct(Agent $agent, string $actionKey = Presenter::ACTION_KEY)
 	{
+		$this->agent = $agent;
 		$this->actionKey = $actionKey;
 	}
 
-	/**
-	 * @param \Nette\Application\Application $application
-	 * @param \Nette\Application\Request $request
-	 */
 	public function __invoke(Application $application, Request $request)
 	{
 		if (PHP_SAPI === 'cli') {
-			newrelic_background_job(true);
+			$this->agent->backgroundJob(true);
 		}
 
 		$params = $request->getParameters();
@@ -45,8 +45,8 @@ class OnRequestCallback
 			$action = Helpers::getConsoleCommand();
 		}
 
-		newrelic_name_transaction($action);
-		newrelic_disable_autorum();
+		$this->agent->nameTransaction($action);
+		$this->agent->disableAutorum();
 	}
 
 }

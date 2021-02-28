@@ -6,6 +6,7 @@ namespace ContributteTests\NewRelic\Cases;
 
 use Contributte\NewRelic\Callbacks\OnErrorCallback;
 use Contributte\NewRelic\Callbacks\OnRequestCallback;
+use Contributte\NewRelic\DI\NewRelicConsoleExtension;
 use Contributte\NewRelic\DI\NewRelicExtension;
 use ContributteTests\NewRelic\Mocks\ApplicationExtension;
 use Nette\DI\Compiler;
@@ -65,8 +66,9 @@ final class NewRelicExtensionTest extends TestCase
 					],
 				],
 			]);
-			$compiler->addExtension('application', new ApplicationExtension());
-			$compiler->addExtension('newrelic', new NewRelicExtension());
+			$compiler->addExtension('application', new ApplicationExtension);
+			$compiler->addExtension('newrelic', new NewRelicExtension);
+			$compiler->addExtension('newrelic.console', new NewRelicConsoleExtension);
 		}, [getmypid(), 1]);
 
 		/** @var Container $container */

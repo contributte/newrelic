@@ -55,8 +55,7 @@
 	},
 	"archive": {
 		"exclude": [
-			".gitignore",
-			"/.travis.yml"
+			".gitignore"
 		]
 	},
 	"extra": {

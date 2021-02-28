@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Tracy;
 
-use Tracy\Debugger;
 use Tracy\ILogger;
 
 class Logger implements ILogger
 {
 
 	/**
-	 * @var \Tracy\ILogger
+	 * @var ILogger
 	 */
 	private $oldLogger;
 
@@ -21,11 +20,11 @@ class Logger implements ILogger
 	private $logLevels;
 
 	/**
-	 * @param array $logLevels
+	 * @param string[] $logLevels
 	 */
-	public function __construct(array $logLevels)
+	public function __construct(ILogger $logger, array $logLevels)
 	{
-		$this->oldLogger = Debugger::getLogger();
+		$this->oldLogger = $logger;
 		$this->logLevels = $logLevels;
 	}
 

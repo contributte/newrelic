@@ -14,13 +14,15 @@ use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Bootstrap;
+use Contributte\NewRelic\Tracy\Logger;
 use Nette\Application\UI\Presenter;
 use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
-use Tracy\Logger;
+use Tracy\Debugger;
+use Tracy\ILogger;
 
 class NewRelicExtension extends CompilerExtension
 {
@@ -51,13 +53,13 @@ class NewRelicExtension extends CompilerExtension
 			'license' => Expect::string(),
 			'actionKey' => Expect::string(Presenter::ACTION_KEY),
 			'logLevel' => Expect::listOf(Expect::string(Expect::anyOf([
-				Logger::CRITICAL,
-				Logger::EXCEPTION,
-				Logger::ERROR,
+				ILogger::CRITICAL,
+				ILogger::EXCEPTION,
+				ILogger::ERROR,
 			])))->default([
-				Logger::CRITICAL,
-				Logger::EXCEPTION,
-				Logger::ERROR,
+				ILogger::CRITICAL,
+				ILogger::EXCEPTION,
+				ILogger::ERROR,
 			]),
 			'rum' => Expect::structure([
 				'enabled' => Expect::string('auto'),
@@ -101,6 +103,13 @@ class NewRelicExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('agent'))
 			->setFactory(ProductionAgent::class);
 
+		$builder->addDefinition($this->prefix('logger'))
+			->setFactory(Logger::class, [
+				$builder->getDefinition('tracy.logger'),
+				$config->logLevel,
+			])
+			->setAutowired(false);
+
 		$this->setupApplicationOnRequest();
 		$this->setupApplicationOnError();
 	}
@@ -123,15 +132,17 @@ class NewRelicExtension extends CompilerExtension
 		}
 
 		// Logger
-		$initialize->addBody('\Tracy\Debugger::setLogger(new \Contributte\NewRelic\Tracy\Logger(?));', [
-			$config->logLevel,
+		$initialize->addBody(Debugger::class . '::setLogger($this->getService(?));', [
+			$this->prefix('logger'),
 		]);
 
 		$this->setupCustom($initialize);
 
 		// Options
 		if ($config->rum->enabled !== 'auto') {
-			$initialize->addBody('newrelic_disable_autorum();');
+			$initialize->addBody('$this->getService(?)->disableAutorum();', [
+				$this->prefix('agent'),
+			]);
 		}
 
 		$config->transactionTracer->addInitCode($initialize);

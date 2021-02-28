@@ -6,6 +6,9 @@ namespace Contributte\NewRelic\DI;
 
 use Contributte\NewRelic\Callbacks\OnErrorCallback;
 use Contributte\NewRelic\Callbacks\OnRequestCallback;
+use Contributte\NewRelic\Config\ErrorCollectorConfig;
+use Contributte\NewRelic\Config\ParametersConfig;
+use Contributte\NewRelic\Config\TransactionTracerConfig;
 use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
@@ -45,7 +48,7 @@ class NewRelicExtension extends CompilerExtension
 			'enabled' => Expect::bool(true),
 			'appName' => Expect::string(),
 			'license' => Expect::string(),
-			'actionKey' => Expect::string(),
+			'actionKey' => Expect::string(Presenter::ACTION_KEY),
 			'logLevel' => Expect::listOf(Expect::string(Expect::anyOf([
 				Logger::CRITICAL,
 				Logger::EXCEPTION,
@@ -58,23 +61,9 @@ class NewRelicExtension extends CompilerExtension
 			'rum' => Expect::structure([
 				'enabled' => Expect::string('auto'),
 			]),
-			'transactionTracer' => Expect::structure([
-				'enabled' => Expect::bool(true),
-				'detail' => Expect::int(1),
-				'recordSql' => Expect::string('obfuscated'),
-				'slowSql' => Expect::bool(true),
-				'threshold' => Expect::string('apdex_f'),
-				'stackTraceThreshold' => Expect::int(500),
-				'explainThreshold' => Expect::int(500),
-			]),
-			'errorCollector' => Expect::structure([
-				'enabled' => Expect::bool(true),
-				'recordDatabaseErrors' => Expect::bool(true),
-			]),
-			'parameters' => Expect::structure([
-				'capture' => Expect::bool(false),
-				'ignored' => Expect::array(),
-			]),
+			'transactionTracer' => Expect::from(new TransactionTracerConfig),
+			'errorCollector' => Expect::from(new ErrorCollectorConfig),
+			'parameters' => Expect::from(new ParametersConfig),
 			'custom' => Expect::structure([
 				'parameters' => Expect::array(),
 				'tracers' => Expect::array(),
@@ -82,7 +71,7 @@ class NewRelicExtension extends CompilerExtension
 		]);
 	}
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$config = $this->getConfig();
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !Bootstrap::isEnabled())) {
@@ -111,7 +100,7 @@ class NewRelicExtension extends CompilerExtension
 		$this->setupApplicationOnError();
 	}
 
-	public function afterCompile(ClassType $class)
+	public function afterCompile(ClassType $class): void
 	{
 		if (!$this->enabled) {
 			return;
@@ -140,56 +129,26 @@ class NewRelicExtension extends CompilerExtension
 			$initialize->addBody('newrelic_disable_autorum();');
 		}
 
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.enabled', ?);", [
-			(string) $config->transactionTracer->enabled,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.detail', ?);", [
-			(string) $config->transactionTracer->detail,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", [
-			(string) $config->transactionTracer->recordSql,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", [
-			(string) $config->transactionTracer->slowSql,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", [
-			(string) $config->transactionTracer->threshold,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", [
-			(string) $config->transactionTracer->stackTraceThreshold,
-		]);
-		$initialize->addBody("ini_set('newrelic.transaction_tracer.explain_threshold', ?);", [
-			(string) $config->transactionTracer->explainThreshold,
-		]);
-		$initialize->addBody("ini_set('newrelic.error_collector.enabled', ?);", [
-			(string) $config->errorCollector->enabled,
-		]);
-		$initialize->addBody("ini_set('newrelic.error_collector.record_database_errors', ?);", [
-			(string) $config->errorCollector->recordDatabaseErrors,
-		]);
-		$initialize->addBody('newrelic_capture_params(?);', [
-			$config->parameters->capture,
-		]);
-		$initialize->addBody("ini_set('newrelic.ignored_params', ?);", [
-			implode(',', $config->parameters->ignored),
-		]);
+		$config->transactionTracer->addInitCode($initialize);
+		$config->errorCollector->addInitCode($initialize);
+		$config->parameters->addInitCode($initialize);
 	}
 
-	private function setupApplicationOnRequest()
+	private function setupApplicationOnRequest(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setFactory(OnRequestCallback::class, [
-				$config->actionKey ?? Presenter::ACTION_KEY,
+				$config->actionKey,
 			]);
 
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onRequest[] = ?', ['@' . $this->prefix('onRequestCallback')]);
 	}
 
-	private function setupApplicationOnError()
+	private function setupApplicationOnError(): void
 	{
 		$builder = $this->getContainerBuilder();
 
@@ -200,7 +159,7 @@ class NewRelicExtension extends CompilerExtension
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
 	}
 
-	private function setupCustom(Method $initialize)
+	private function setupCustom(Method $initialize): void
 	{
 		$config = $this->getConfig();
 
@@ -216,7 +175,7 @@ class NewRelicExtension extends CompilerExtension
 		}
 	}
 
-	private function setupRUM()
+	private function setupRUM(): void
 	{
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();

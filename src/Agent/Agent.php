@@ -9,6 +9,8 @@ interface Agent
 
 	public const VERSION = '9.12.0.268';
 
+	public function isEnabled(): bool;
+
 	/**
 	 * Accepts an array of distributed trace headers.
 	 *
@@ -74,7 +76,7 @@ interface Agent
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_disable_autorum
 	 */
-	public function disableAutorum(): ?bool;
+	public function disableAutorum(): void;
 
 	/**
 	 * Stop timing the current transaction, but continue instrumenting it.

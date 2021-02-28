@@ -11,13 +11,30 @@ final class ProductionAgent implements Agent
 {
 
 	/**
+	 * @var bool
+	 */
+	private $enabled;
+
+	public function __construct(bool $enabled)
+	{
+		$this->enabled = $enabled && (bool) ini_get('newrelic.enabled');
+	}
+
+	public function isEnabled(): bool
+	{
+		return $this->enabled;
+	}
+
+	/**
 	 * Accepts an array of distributed trace headers.
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelicacceptdistributedtraceheaders
 	 */
 	public function acceptDistributedTraceHeaders(array $headers, string $transportType): bool
 	{
-		return newrelic_accept_distributed_trace_headers ($headers, $transportType);
+		return $this->enabled
+			? newrelic_accept_distributed_trace_headers ($headers, $transportType)
+			: false;
 	}
 
 	/**
@@ -27,7 +44,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function insertDistributedTraceHeaders(array $headers): bool
 	{
-		return newrelic_insert_distributed_trace_headers($headers);
+		return $this->enabled
+			? newrelic_insert_distributed_trace_headers($headers)
+			: false;
 	}
 
 	/**
@@ -39,7 +58,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function addCustomParameter(string $key, $value): bool
 	{
-		return newrelic_add_custom_parameter($key, $value);
+		return $this->enabled
+			? newrelic_add_custom_parameter($key, $value)
+			: false;
 	}
 
 	/**
@@ -51,7 +72,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function addCustomSpanParameter(string $key, $value): bool
 	{
-		return newrelic_add_custom_span_parameter($key, $value);
+		return $this->enabled
+			? newrelic_add_custom_span_parameter($key, $value)
+			: false;
 	}
 
 	/**
@@ -61,7 +84,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function addCustomTracer(string $functionName): bool
 	{
-		return newrelic_add_custom_tracer($functionName);
+		return $this->enabled
+			? newrelic_add_custom_tracer($functionName)
+			: false;
 	}
 
 	/**
@@ -91,7 +116,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function customMetric(string $metricName, float $value): bool
 	{
-		return newrelic_custom_metric($metricName, $value);
+		return $this->enabled
+			? newrelic_custom_metric('Custom/' . $metricName, $value)
+			: false;
 	}
 
 	/**
@@ -99,9 +126,9 @@ final class ProductionAgent implements Agent
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_disable_autorum
 	 */
-	public function disableAutorum(): ?bool
+	public function disableAutorum(): void
 	{
-		return newrelic_disable_autorum();
+		newrelic_disable_autorum();
 	}
 
 	/**
@@ -121,7 +148,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function endTransaction(bool $ignore = false): bool
 	{
-		return newrelic_end_transaction($ignore);
+		return $this->enabled
+			? newrelic_end_transaction($ignore)
+			: false;
 	}
 
 	/**
@@ -131,7 +160,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function getBrowserTimingFooter(bool $includeTags = true): string
 	{
-		return newrelic_get_browser_timing_footer($includeTags);
+		return $this->enabled
+			? newrelic_get_browser_timing_footer($includeTags)
+			: '';
 	}
 
 	/**
@@ -141,7 +172,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function getBrowserTimingHeader(bool $includeTags = true): string
 	{
-		return newrelic_get_browser_timing_header($includeTags);
+		return $this->enabled
+			? newrelic_get_browser_timing_header($includeTags)
+			: '';
 	}
 
 	/**
@@ -151,7 +184,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function getLinkingMetadata(): array
 	{
-		return newrelic_get_linking_metadata();
+		return $this->enabled
+			? newrelic_get_linking_metadata()
+			: [];
 	}
 
 	/**
@@ -161,7 +196,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function getTraceMetadata(): array
 	{
-		return newrelic_get_trace_metadata();
+		return $this->enabled
+			? newrelic_get_trace_metadata()
+			: [];
 	}
 
 	/**
@@ -191,7 +228,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function isSampled(): bool
 	{
-		return newrelic_is_sampled();
+		return $this->enabled
+			? newrelic_is_sampled()
+			: false;
 	}
 
 	/**
@@ -201,7 +240,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function nameTransaction(string $name): bool
 	{
-		return newrelic_name_transaction($name);
+		return $this->enabled
+			? newrelic_name_transaction($name)
+			: false;
 	}
 
 	/**
@@ -221,8 +262,13 @@ final class ProductionAgent implements Agent
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_notice_error
 	 */
-	public function noticeFullError(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?string $errcontext = null): void
-	{
+	public function noticeFullError(
+		int $errno,
+		string $errstr,
+		?string $errfile = null,
+		?int $errline = null,
+		?string $errcontext = null
+	): void {
 		newrelic_notice_error($errno, $errstr, $errfile, $errline, $errcontext);
 	}
 
@@ -245,7 +291,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function recordDatastoreSegment(callable $func, array $parameters)
 	{
-		return newrelic_record_datastore_segment($func, $parameters);
+		return $this->enabled
+			? newrelic_record_datastore_segment($func, $parameters)
+			: false;
 	}
 
 	/**
@@ -255,7 +303,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function setAppName(string $name, string $license = '', bool $xmit = false): bool
 	{
-		return newrelic_set_appname($name, $license, $xmit);
+		return $this->enabled
+			? newrelic_set_appname($name, $license, $xmit)
+			: false;
 	}
 
 	/**
@@ -265,7 +315,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
 	{
-		return newrelic_set_user_attributes($userValue, $accountValue, $productValue);
+		return $this->enabled
+			? newrelic_set_user_attributes($userValue, $accountValue, $productValue)
+			: false;
 	}
 
 	/**
@@ -275,7 +327,9 @@ final class ProductionAgent implements Agent
 	 */
 	public function startTransaction(string $appName, string $license = ''): bool
 	{
-		return newrelic_start_transaction($appName, $license);
+		return $this->enabled
+			? newrelic_start_transaction($appName, $license)
+			: false;
 	}
 
 }

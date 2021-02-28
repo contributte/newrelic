@@ -98,7 +98,9 @@ class NewRelicExtension extends CompilerExtension
 		}
 
 		$builder->addDefinition($this->prefix('agent'))
-			->setFactory(ProductionAgent::class);
+			->setFactory(ProductionAgent::class, [
+				$this->enabled,
+			]);
 
 		$builder->addDefinition($this->prefix('logger'))
 			->setFactory(Logger::class, [
@@ -181,14 +183,18 @@ class NewRelicExtension extends CompilerExtension
 		$config = $this->getConfig();
 
 		foreach ($config->custom->parameters as $name => $value) {
-			$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Parameters::addParameter(?, ?);', [
+			$initialize->addBody('$this->getService(?)->addCustomParameter(?, ?);', [
+				$this->prefix('agent'),
 				$name,
 				$value,
 			]);
 		}
 
 		foreach ($config->custom->tracers as $function) {
-			$initialize->addBody('\Contributte\NewRelic\Tracy\Custom\Tracers::addTracer(?);', [$function]);
+			$initialize->addBody('$this->getService(?)->addCustomTracer(?);', [
+				$this->prefix('agent'),
+				$function,
+			]);
 		}
 	}
 

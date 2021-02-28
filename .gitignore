@@ -1,2 +1,10 @@
-vendor
-composer.lock
+# IDE
+/.idea
+
+# Composer
+/vendor
+/composer.lock
+
+# Tests
+/temp
+/coverage.xml

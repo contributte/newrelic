@@ -52,15 +52,11 @@ class NewRelicExtension extends CompilerExtension
 			'appName' => Expect::string(),
 			'license' => Expect::string(),
 			'actionKey' => Expect::string(Presenter::ACTION_KEY),
-			'logLevel' => Expect::listOf(Expect::string(Expect::anyOf([
+			'logLevel' => Expect::listOf(Expect::anyOf(
 				ILogger::CRITICAL,
 				ILogger::EXCEPTION,
-				ILogger::ERROR,
-			])))->default([
-				ILogger::CRITICAL,
-				ILogger::EXCEPTION,
-				ILogger::ERROR,
-			]),
+				ILogger::ERROR
+			)),
 			'rum' => Expect::structure([
 				'enabled' => Expect::string('auto'),
 			]),

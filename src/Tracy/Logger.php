@@ -10,6 +10,15 @@ class Logger implements ILogger
 {
 
 	/**
+	 * @var string[]
+	 */
+	private $defaultLogLevels = [
+		ILogger::CRITICAL,
+		ILogger::EXCEPTION,
+		ILogger::ERROR,
+	];
+
+	/**
 	 * @var ILogger
 	 */
 	private $oldLogger;
@@ -25,7 +34,7 @@ class Logger implements ILogger
 	public function __construct(ILogger $logger, array $logLevels)
 	{
 		$this->oldLogger = $logger;
-		$this->logLevels = $logLevels;
+		$this->logLevels = $logLevels ?: $this->defaultLogLevels;
 	}
 
 	/**

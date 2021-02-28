@@ -1,0 +1,10 @@
+version: '3'
+services:
+  newrelic:
+    container_name: contributte-newrelic
+    image: contributte/newrelic
+    working_dir: /app
+    build:
+      context: ./.docker
+    volumes:
+      - .:/app

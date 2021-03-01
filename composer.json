@@ -33,7 +33,9 @@
 		"contributte/event-dispatcher": "^0.5.0",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"ninjify/coding-standard": "^0.10.0",
-		"ninjify/nunjuck": "^0.3.0"
+		"ninjify/nunjuck": "^0.3.0",
+		"phpstan/phpstan": "^0.12.38",
+		"phpstan/phpstan-strict-rules": "^0.12.4"
 	},
 	"autoload": {
 		"psr-4": {
@@ -49,6 +51,7 @@
 		"lint": "vendor/bin/parallel-lint -e php,phpt src",
 		"cs": "vendor/bin/phpcs --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src",
 		"csfix": "vendor/bin/phpcbf --standard=vendor/ninjify/coding-standard/ruleset-gamee.xml --extensions=php,phpt --tab-width=4 -sp src",
+		"phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src --level 7",
 		"tests": "vendor/bin/tester -s -p php --colors 1 -C tests/Cases"
 	},
 	"suggest": {

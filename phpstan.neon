@@ -1,0 +1,8 @@
+includes:
+	- ./vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+	ignoreErrors:
+		- '#Method Contributte\\NewRelic\\Agent\\.*Agent::.+ has parameter .+ with no value type specified in iterable type array#'
+		- '#Method Contributte\\NewRelic\\Agent\\.*Agent::.+ return type has no value type specified in iterable type array#'
+		- '#Parameter \#1 \$unused_1 of function newrelic_notice_error expects string, int given#'

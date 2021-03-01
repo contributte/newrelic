@@ -29,3 +29,4 @@ jobs:
       - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
       - run: composer lint
       - run: composer cs
+      - run: composer phpstan

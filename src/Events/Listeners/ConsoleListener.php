@@ -22,6 +22,9 @@ final class ConsoleListener implements EventSubscriberInterface
 		$this->agent = $agent;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -30,14 +33,14 @@ final class ConsoleListener implements EventSubscriberInterface
 		];
 	}
 
-	public function onCommand(Console\Event\ConsoleCommandEvent $event)
+	public function onCommand(Console\Event\ConsoleCommandEvent $event): void
 	{
 		$this->agent->backgroundJob();
 		$this->agent->nameTransaction(Helpers::getConsoleCommand());
 		$this->agent->disableAutorum();
 	}
 
-	public function onError(Console\Event\ConsoleErrorEvent $event)
+	public function onError(Console\Event\ConsoleErrorEvent $event): void
 	{
 		$this->agent->noticeError($event->getError()->getMessage(), $event->getError());
 	}

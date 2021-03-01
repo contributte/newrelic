@@ -16,6 +16,7 @@ use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Logger;
 use Nette\Application\UI\Presenter;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 use Nette\Schema\Expect;
@@ -72,6 +73,7 @@ class NewRelicExtension extends CompilerExtension
 	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
+		/** @var \stdClass $config */
 		$config = $this->getConfig();
 		$enabled = (bool) ini_get('newrelic.enabled');
 
@@ -119,6 +121,7 @@ class NewRelicExtension extends CompilerExtension
 			return;
 		}
 
+		/** @var \stdClass $config */
 		$config = $this->getConfig();
 		$initialize = $class->getMethod('initialize');
 
@@ -153,6 +156,7 @@ class NewRelicExtension extends CompilerExtension
 	private function setupApplicationOnRequest(): void
 	{
 		$builder = $this->getContainerBuilder();
+		/** @var \stdClass $config */
 		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
@@ -161,6 +165,7 @@ class NewRelicExtension extends CompilerExtension
 				$config->actionKey,
 			]);
 
+		/** @var ServiceDefinition $application */
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onRequest[] = ?', ['@' . $this->prefix('onRequestCallback')]);
 	}
@@ -174,12 +179,14 @@ class NewRelicExtension extends CompilerExtension
 				'@' . $this->prefix('agent'),
 			]);
 
+		/** @var ServiceDefinition $application */
 		$application = $builder->getDefinition('application');
 		$application->addSetup('$service->onError[] = ?', ['@' . $this->prefix('onErrorCallback')]);
 	}
 
 	private function setupCustom(Method $initialize): void
 	{
+		/** @var \stdClass $config */
 		$config = $this->getConfig();
 
 		foreach ($config->custom->parameters as $name => $value) {
@@ -200,6 +207,7 @@ class NewRelicExtension extends CompilerExtension
 
 	private function setupRUM(): void
 	{
+		/** @var \stdClass $config */
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 

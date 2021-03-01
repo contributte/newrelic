@@ -36,14 +36,9 @@ class NewRelicConsoleExtension extends CompilerExtension
 			throw new ServiceCreationException(sprintf('Missing "%s" service', EventDispatcherInterface::class));
 		}
 
-		$config = $this->getConfig();
 		$enabled = (bool) ini_get('newrelic.enabled');
 
 		if ($this->skipIfIsDisabled && (!extension_loaded('newrelic') || !$enabled)) {
-			return;
-		}
-
-		if (isset($config['enabled']) && !$config['enabled']) {
 			return;
 		}
 

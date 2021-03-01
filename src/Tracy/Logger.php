@@ -34,19 +34,19 @@ class Logger implements ILogger
 	public function __construct(ILogger $logger, array $logLevels)
 	{
 		$this->oldLogger = $logger;
-		$this->logLevels = $logLevels ?: $this->defaultLogLevels;
+		$this->logLevels = $logLevels ?? $this->defaultLogLevels;
 	}
 
 	/**
-	 * @param string|array $message
-	 * @param string $priority
+	 * @param mixed $message
+	 * @param mixed $priority
 	 * @return string logged error filename
 	 */
 	public function log($message, $priority = null)
 	{
 		$exceptionFile = $this->oldLogger->log($message, $priority);
 
-		if (in_array($priority, $this->logLevels)) {
+		if (in_array($priority, $this->logLevels, true)) {
 			if (is_array($message)) {
 				$message = implode(' ', $message);
 			}

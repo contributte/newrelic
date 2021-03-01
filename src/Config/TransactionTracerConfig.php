@@ -53,13 +53,13 @@ final class TransactionTracerConfig
 			(string) $this->detail,
 		]);
 		$method->addBody("ini_set('newrelic.transaction_tracer.record_sql', ?);", [
-			(string) $this->recordSql,
+			$this->recordSql,
 		]);
 		$method->addBody("ini_set('newrelic.transaction_tracer.slow_sql', ?);", [
 			(string) $this->slowSql,
 		]);
 		$method->addBody("ini_set('newrelic.transaction_tracer.threshold', ?);", [
-			(string) $this->threshold,
+			$this->threshold,
 		]);
 		$method->addBody("ini_set('newrelic.transaction_tracer.stack_trace_thresholdshow', ?);", [
 			(string) $this->stackTraceThreshold,

@@ -16,7 +16,7 @@ interface Agent
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelicacceptdistributedtraceheaders
 	 */
-	public function acceptDistributedTraceHeaders(array $headers, string $transportType);
+	public function acceptDistributedTraceHeaders(array $headers, string $transportType): bool;
 
 	/**
 	 * Inserts W3C Trace Context headers and New Relic Distributed Tracing headers into an outbound array of headers.

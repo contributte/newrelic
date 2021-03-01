@@ -29,7 +29,7 @@ class OnRequestCallback
 		$this->actionKey = $actionKey;
 	}
 
-	public function __invoke(Application $application, Request $request)
+	public function __invoke(Application $application, Request $request): void
 	{
 		if (PHP_SAPI === 'cli') {
 			$this->agent->backgroundJob(true);

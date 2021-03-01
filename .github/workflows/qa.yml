@@ -10,10 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v1
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: 7.1
           coverage: none
+
+      - name: Add NewRelic APT source
+        run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
+      - name: Add NewRelic APT key
+        run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+      - name: Update APT
+        run: sudo apt-get update
+      - name: Install NewRelic PHP extension
+        run: sudo apt-get -y install newrelic-php5
 
       - name: Get Composer Cache Directory
         id: composer-cache

@@ -49,7 +49,6 @@ jobs:
         run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
         shell: bash
 
-
   lowest_dependencies:
     name: Lowest Dependencies
     runs-on: ubuntu-latest

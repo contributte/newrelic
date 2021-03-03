@@ -23,14 +23,11 @@ final class DefaultWebTransactionNameFormatter implements WebTransactionNameForm
 
 	public function format(Request $request): string
 	{
-		$name = $request->getPresenterName();
+		$presenter = $request->getPresenterName();
 		$params = $request->getParameters();
+		$action = $params[Presenter::ACTION_KEY] ?? Presenter::DEFAULT_ACTION;
 
-		if (isset($params[Presenter::ACTION_KEY])) {
-			$name = sprintf('%s:%s', $name, $params[Presenter::ACTION_KEY]);
-		}
-
-		return $name;
+		return sprintf('%s:%s', $presenter, $action);
 	}
 
 	public function formatArgv(): string

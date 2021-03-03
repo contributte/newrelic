@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace ContributteTests\NewRelic\Cases;
+namespace ContributteTests\NewRelic\Cases\DI;
 
 use Contributte\NewRelic\Agent\ProductionAgent;
 use Contributte\NewRelic\Callbacks\OnErrorCallback;
@@ -22,7 +22,7 @@ use Tester\TestCase;
 use Tracy\Bridges\Nette\TracyExtension;
 use Tracy\Debugger;
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 /**
  * @TestCase

@@ -35,6 +35,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
+      - run: composer update --no-progress --prefer-dist --prefer-stable
       - run: composer cs
       - run: composer phpstan

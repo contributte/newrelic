@@ -31,7 +31,7 @@
 	"require-dev": {
 		"contributte/console": "^0.9.0",
 		"contributte/event-dispatcher": "^0.8.0",
-		"ninjify/coding-standard": "^0.11.0",
+		"ninjify/coding-standard": "^0.11.2",
 		"ninjify/nunjuck": "^0.3.0",
 		"phpstan/phpstan": "^0.12.38",
 		"phpstan/phpstan-strict-rules": "^0.12.4"

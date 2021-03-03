@@ -13,14 +13,13 @@ use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Logger;
+use ContributteTests\NewRelic\Libs\TestCase;
 use ContributteTests\NewRelic\Mocks\ApplicationExtension;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
 use Tester\Assert;
-use Tester\TestCase;
 use Tracy\Bridges\Nette\TracyExtension;
-use Tracy\Debugger;
 
 require_once __DIR__ . '/../../bootstrap.php';
 

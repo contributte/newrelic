@@ -6,10 +6,6 @@ namespace ContributteTests\NewRelic\Mocks;
 
 use Nette;
 
-
-/**
- * Application extension for Nette DI.
- */
 final class ApplicationExtension extends Nette\DI\CompilerExtension
 {
 

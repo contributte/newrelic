@@ -10,6 +10,7 @@ use Contributte\NewRelic\Callbacks\OnRequestCallback;
 use Contributte\NewRelic\Config\ErrorCollectorConfig;
 use Contributte\NewRelic\Config\ParametersConfig;
 use Contributte\NewRelic\Config\TransactionTracerConfig;
+use Contributte\NewRelic\Formatters\DefaultWebTransactionNameFormatter;
 use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
@@ -58,6 +59,7 @@ class NewRelicExtension extends CompilerExtension
 			'rum' => Expect::structure([
 				'enabled' => Expect::string('auto'),
 			]),
+			'transactionNameFormatter' => Expect::string(DefaultWebTransactionNameFormatter::class),
 			'transactionTracer' => Expect::from(new TransactionTracerConfig),
 			'errorCollector' => Expect::from(new ErrorCollectorConfig),
 			'parameters' => Expect::from(new ParametersConfig),
@@ -155,6 +157,11 @@ class NewRelicExtension extends CompilerExtension
 	private function setupApplicationOnRequest(): void
 	{
 		$builder = $this->getContainerBuilder();
+		/** @var \stdClass $config */
+		$config = $this->getConfig();
+
+		$builder->addDefinition($this->prefix('transactionNameFormatter.web'))
+			->setFactory($config->transactionNameFormatter);
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
 			->setFactory(OnRequestCallback::class);

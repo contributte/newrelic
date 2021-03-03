@@ -6,8 +6,11 @@ namespace Contributte\NewRelic\DI;
 
 use Contributte\Console\Application;
 use Contributte\NewRelic\Events\Listeners\ConsoleListener;
+use Contributte\NewRelic\Formatters\DefaultCliTransactionNameFormatter;
 use Nette\DI\CompilerExtension;
 use Nette\DI\ServiceCreationException;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class NewRelicConsoleExtension extends CompilerExtension
@@ -24,6 +27,13 @@ class NewRelicConsoleExtension extends CompilerExtension
 	public function __construct($skipIfIsDisabled = false)
 	{
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
+	}
+
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'transactionNameFormatter' => Expect::string(DefaultCliTransactionNameFormatter::class),
+		]);
 	}
 
 	public function loadConfiguration(): void
@@ -48,6 +58,11 @@ class NewRelicConsoleExtension extends CompilerExtension
 	private function setupConsoleListener(): void
 	{
 		$builder = $this->getContainerBuilder();
+		/** @var \stdClass $config */
+		$config = $this->getConfig();
+
+		$builder->addDefinition($this->prefix('transactionNameFormatter.cli'))
+			->setFactory($config->transactionNameFormatter);
 
 		$builder->addDefinition($this->prefix('consoleListener'))
 			->setFactory(ConsoleListener::class);

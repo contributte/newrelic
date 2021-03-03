@@ -8,6 +8,6 @@
 		<exclude-pattern>/src/Tracy/Logger.php</exclude-pattern>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable">
-		<exclude-pattern>/src/Helpers.php</exclude-pattern>
+		<exclude-pattern>/src/Formatters/DefaultWebTransactionNameFormatter.php</exclude-pattern>
 	</rule>
 </ruleset>

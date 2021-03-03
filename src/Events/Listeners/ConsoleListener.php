@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Contributte\NewRelic\Events\Listeners;
 
 use Contributte\NewRelic\Agent\Agent;
-use Contributte\NewRelic\Helpers;
+use Contributte\NewRelic\Formatters\CliTransactionNameFormatter;
 use Symfony\Component\Console;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -17,15 +17,21 @@ final class ConsoleListener implements EventSubscriberInterface
 	 */
 	private $agent;
 
-	public function __construct(Agent $agent)
+	/**
+	 * @var CliTransactionNameFormatter
+	 */
+	private $formatter;
+
+	public function __construct(Agent $agent, CliTransactionNameFormatter $formatter)
 	{
 		$this->agent = $agent;
+		$this->formatter = $formatter;
 	}
 
 	public function onCommand(Console\Event\ConsoleCommandEvent $event): void
 	{
 		$this->agent->backgroundJob();
-		$this->agent->nameTransaction(Helpers::getConsoleCommand());
+		$this->agent->nameTransaction($this->formatter->format($event->getCommand()));
 		$this->agent->disableAutorum();
 	}
 

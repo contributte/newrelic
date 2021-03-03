@@ -10,6 +10,7 @@ use Contributte\NewRelic\Callbacks\OnRequestCallback;
 use Contributte\NewRelic\Config\ErrorCollectorConfig;
 use Contributte\NewRelic\Config\ParametersConfig;
 use Contributte\NewRelic\Config\TransactionTracerConfig;
+use Contributte\NewRelic\Environment;
 use Contributte\NewRelic\Formatters\DefaultWebTransactionNameFormatter;
 use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
@@ -159,6 +160,9 @@ class NewRelicExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		/** @var \stdClass $config */
 		$config = $this->getConfig();
+
+		$builder->addDefinition($this->prefix('environment'))
+			->setFactory(Environment::class);
 
 		$builder->addDefinition($this->prefix('transactionNameFormatter.web'))
 			->setFactory($config->transactionNameFormatter);

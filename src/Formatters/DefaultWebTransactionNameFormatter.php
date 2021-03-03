@@ -4,11 +4,22 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Formatters;
 
+use Contributte\NewRelic\Environment;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
 
 final class DefaultWebTransactionNameFormatter implements WebTransactionNameFormatter
 {
+
+	/**
+	 * @var Environment
+	 */
+	private $environment;
+
+	public function __construct(Environment $environment)
+	{
+		$this->environment = $environment;
+	}
 
 	public function format(Request $request): string
 	{
@@ -24,7 +35,9 @@ final class DefaultWebTransactionNameFormatter implements WebTransactionNameForm
 
 	public function formatArgv(): string
 	{
-		return trim('$ ' . basename($_SERVER['argv'][0]) . ' ' . implode(' ', array_slice($_SERVER['argv'], 1)));
+		$argv = $this->environment->getArgv();
+
+		return trim('$ ' . basename($argv[0]) . ' ' . implode(' ', array_slice($argv, 1)));
 	}
 
 }

@@ -86,6 +86,11 @@ class NewRelicExtension extends CompilerExtension
 			$this->enabled = false;
 		}
 
+		$builder->addDefinition($this->prefix('agent'))
+			->setFactory(ProductionAgent::class, [
+				$this->enabled,
+			]);
+
 		$this->setupRUM();
 
 		if (!$this->enabled) {
@@ -99,11 +104,6 @@ class NewRelicExtension extends CompilerExtension
 		if (!$enabled) {
 			throw new \RuntimeException('NewRelic is not enabled');
 		}
-
-		$builder->addDefinition($this->prefix('agent'))
-			->setFactory(ProductionAgent::class, [
-				$this->enabled,
-			]);
 
 		$builder->addDefinition($this->prefix('logger'))
 			->setFactory(Logger::class, [

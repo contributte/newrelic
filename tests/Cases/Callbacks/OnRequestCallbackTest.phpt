@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace ContributteTests\NewRelic\Cases\Callbacks;
 
@@ -46,7 +46,7 @@ final class OnRequestCallbackTest extends TestCase
 		$request = new Request('MyPresenter', 'GET', [Presenter::ACTION_KEY => 'default']);
 
 		$callback = new OnRequestCallback($agent, $environment, $formatter);
-		$callback->__invoke($application, $request);
+		$callback($application, $request);
 
 		Assert::true(true);
 	}
@@ -73,7 +73,7 @@ final class OnRequestCallbackTest extends TestCase
 		$request = new Request('MyPresenter', 'GET', [Presenter::ACTION_KEY => 'default']);
 
 		$callback = new OnRequestCallback($agent, $environment, $formatter);
-		$callback->__invoke($application, $request);
+		$callback($application, $request);
 
 		Assert::true(true);
 	}

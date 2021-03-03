@@ -49,9 +49,9 @@
 	},
 	"scripts": {
 		"tests": "vendor/bin/tester -s -p php -c tests/php.ini tests/Cases",
-		"cs": "vendor/bin/phpcs --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src",
-		"csfix": "vendor/bin/phpcbf --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src",
-		"phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src --level 7"
+		"cs": "vendor/bin/phpcs --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
+		"csfix": "vendor/bin/phpcbf --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
+		"phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src tests --level 7"
 	},
 	"suggest": {
 		"contributte/console": "For a nice formated newrelic logs from console commands",

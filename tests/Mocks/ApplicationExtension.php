@@ -9,9 +9,8 @@ use Nette;
 final class ApplicationExtension extends Nette\DI\CompilerExtension
 {
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
-		$config = $this->config;
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition('application')

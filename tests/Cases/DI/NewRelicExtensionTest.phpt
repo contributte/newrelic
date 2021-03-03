@@ -38,7 +38,6 @@ final class NewRelicExtensionTest extends TestCase
 					'enabled' => true,
 					'appName' => 'YourApplicationName',
 					'license' => 'yourLicenseCode',
-					'actionKey' => 'action',
 					'logLevel' => [
 						'critical',
 						'exception',

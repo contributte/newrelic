@@ -14,7 +14,6 @@ use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Logger;
-use Nette\Application\UI\Presenter;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
@@ -51,7 +50,6 @@ class NewRelicExtension extends CompilerExtension
 			'enabled' => Expect::bool(true),
 			'appName' => Expect::string('PHP Application'),
 			'license' => Expect::string(''),
-			'actionKey' => Expect::string(Presenter::ACTION_KEY),
 			'logLevel' => Expect::listOf(Expect::anyOf(
 				ILogger::CRITICAL,
 				ILogger::EXCEPTION,
@@ -157,14 +155,9 @@ class NewRelicExtension extends CompilerExtension
 	private function setupApplicationOnRequest(): void
 	{
 		$builder = $this->getContainerBuilder();
-		/** @var \stdClass $config */
-		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('onRequestCallback'))
-			->setFactory(OnRequestCallback::class, [
-				'@' . $this->prefix('agent'),
-				$config->actionKey,
-			]);
+			->setFactory(OnRequestCallback::class);
 
 		/** @var ServiceDefinition $application */
 		$application = $builder->getDefinition('application');

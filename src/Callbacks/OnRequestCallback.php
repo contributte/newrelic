@@ -18,15 +18,9 @@ class OnRequestCallback
 	 */
 	private $agent;
 
-	/**
-	 * @var string
-	 */
-	private $actionKey;
-
-	public function __construct(Agent $agent, string $actionKey = Presenter::ACTION_KEY)
+	public function __construct(Agent $agent)
 	{
 		$this->agent = $agent;
-		$this->actionKey = $actionKey;
 	}
 
 	public function __invoke(Application $application, Request $request): void
@@ -37,8 +31,8 @@ class OnRequestCallback
 
 		$params = $request->getParameters();
 		$action = $request->getPresenterName();
-		if (isset($params[$this->actionKey])) {
-			$action = sprintf('%s:%s', $action, $params[$this->actionKey]);
+		if (isset($params[Presenter::ACTION_KEY])) {
+			$action = sprintf('%s:%s', $action, $params[Presenter::ACTION_KEY]);
 		}
 
 		if (PHP_SAPI === 'cli') {

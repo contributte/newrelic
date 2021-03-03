@@ -29,7 +29,6 @@ newrelic:
   enabled: true #default
   appName: YourApplicationName #optional
   license: yourLicenseCode #optional
-  actionKey: action # default - optional - action parameter name
   logLevel: #defaults
     - critical
     - exception

@@ -162,7 +162,13 @@ interface Agent
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_notice_error
 	 */
-	public function noticeFullError(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?string $errcontext = null): void;
+	public function noticeFullError(
+		int $errno,
+		string $errstr,
+		?string $errfile = null,
+		?int $errline = null,
+		?string $errcontext = null
+	): void;
 
 	/**
 	 * Record a custom event with the given name and attributes.

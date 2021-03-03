@@ -34,6 +34,7 @@ class HeaderControl extends Control
 	public function disableScriptTag(): self
 	{
 		$this->withScriptTag = false;
+
 		return $this;
 	}
 

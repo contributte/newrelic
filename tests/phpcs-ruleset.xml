@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="NewRelic">
+	<description>NewRelic custom coding standard</description>
+	<rule ref="./vendor/ninjify/coding-standard/ruleset-gamee.xml">
+		<exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+		<exclude-pattern>/src/Tracy/Logger.php</exclude-pattern>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable">
+		<exclude-pattern>/app/src/Helpers.php</exclude-pattern>
+	</rule>
+</ruleset>

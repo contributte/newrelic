@@ -26,7 +26,8 @@ class OnErrorCallback
 	 */
 	public function __invoke(Application $application, $e): void
 	{
-		if ($e instanceof BadRequestException) { // skip 4xx errors
+		if ($e instanceof BadRequestException) {
+			// skip 4xx errors
 			return;
 		}
 

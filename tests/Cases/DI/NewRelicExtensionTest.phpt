@@ -11,7 +11,6 @@ use Contributte\NewRelic\DI\NewRelicConsoleExtension;
 use Contributte\NewRelic\DI\NewRelicExtension;
 use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
-use Contributte\NewRelic\RUM\User;
 use Contributte\NewRelic\Tracy\Logger;
 use ContributteTests\NewRelic\Libs\TestCase;
 use ContributteTests\NewRelic\Mocks\ApplicationExtension;
@@ -84,7 +83,6 @@ final class NewRelicExtensionTest extends TestCase
 		Assert::type(Logger::class, $container->getService('newrelic.logger'));
 		Assert::type(OnRequestCallback::class, $container->getService('newrelic.onRequestCallback'));
 		Assert::type(OnErrorCallback::class, $container->getService('newrelic.onErrorCallback'));
-		Assert::type(User::class, $container->getService('newrelic.rum.user'));
 		Assert::type(HeaderControl::class, $container->getService('newrelic.rum.headerControl'));
 		Assert::type(FooterControl::class, $container->getService('newrelic.rum.footerControl'));
 	}

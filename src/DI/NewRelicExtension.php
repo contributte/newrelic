@@ -106,6 +106,7 @@ class NewRelicExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('logger'))
 			->setFactory(Logger::class, [
+				$builder->getDefinition('agent'),
 				$builder->getDefinition('tracy.logger'),
 				$config->logLevel,
 			])

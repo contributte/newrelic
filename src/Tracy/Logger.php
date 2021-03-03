@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contributte\NewRelic\Tracy;
 
+use Contributte\NewRelic\Agent\Agent;
 use Tracy\ILogger;
 
 class Logger implements ILogger
@@ -19,6 +20,11 @@ class Logger implements ILogger
 	];
 
 	/**
+	 * @var Agent
+	 */
+	private $agent;
+
+	/**
 	 * @var ILogger
 	 */
 	private $oldLogger;
@@ -31,8 +37,9 @@ class Logger implements ILogger
 	/**
 	 * @param string[] $logLevels
 	 */
-	public function __construct(ILogger $logger, array $logLevels)
+	public function __construct(Agent $agent, ILogger $logger, array $logLevels)
 	{
+		$this->agent = $agent;
 		$this->oldLogger = $logger;
 		$this->logLevels = $logLevels ?? $this->defaultLogLevels;
 	}
@@ -51,7 +58,7 @@ class Logger implements ILogger
 				$message = implode(' ', $message);
 			}
 
-			newrelic_notice_error($message);
+			$this->agent->noticeError($message);
 		}
 
 		return $exceptionFile;

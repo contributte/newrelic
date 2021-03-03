@@ -22,7 +22,7 @@ final class ParametersConfig
 	public function addInitCode(Method $method): void
 	{
 		$method->addBody("ini_set('newrelic.capture_params', ?);", [
-			$this->capture,
+			(string) $this->capture,
 		]);
 		$method->addBody("ini_set('newrelic.ignored_params', ?);", [
 			implode(',', $this->ignored),

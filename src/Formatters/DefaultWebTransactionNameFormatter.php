@@ -37,7 +37,7 @@ final class DefaultWebTransactionNameFormatter implements WebTransactionNameForm
 	{
 		$argv = $this->environment->getArgv();
 
-		return trim('$ ' . basename($argv[0]) . ' ' . implode(' ', array_slice($argv, 1)));
+		return trim(basename($argv[0]) . ' ' . implode(' ', array_slice($argv, 1)));
 	}
 
 }

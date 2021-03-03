@@ -28,20 +28,18 @@ final class OnRequestCallbackTest extends TestCase
 		$agent = Mockery::mock(Agent::class)
 			->shouldReceive('backgroundJob')
 			->shouldReceive('nameTransaction')
-				->with('$ OnRequestCallbackTest.phpt --method=testExtension')
+				->with('TransactionName')
 			->shouldReceive('disableAutorum')
 			->getMock();
 
 		$environment = Mockery::mock(Environment::class)
 			->shouldReceive('isCli')
 			->andReturn(true)
-			->shouldReceive('getArgv')
-			->andReturn('/app/tests/Callbacks/OnRequestCallbackTest.phpt --method=testExtension')
 			->getMock();
 
 		$formatter = Mockery::mock(WebTransactionNameFormatter::class)
 			->shouldReceive('formatArgv')
-			->andReturn('$ OnRequestCallbackTest.phpt --method=testExtension')
+			->andReturn('TransactionName')
 			->getMock();
 
 		$application = Mockery::mock(Application::class);

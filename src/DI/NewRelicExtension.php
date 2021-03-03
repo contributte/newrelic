@@ -58,7 +58,7 @@ class NewRelicExtension extends CompilerExtension
 				ILogger::ERROR
 			)),
 			'rum' => Expect::structure([
-				'enabled' => Expect::string('auto'),
+				'enabled' => Expect::anyOf('auto', true, false)->default('auto'),
 			]),
 			'transactionNameFormatter' => Expect::string(DefaultWebTransactionNameFormatter::class),
 			'transactionTracer' => Expect::from(new TransactionTracerConfig),

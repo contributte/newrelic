@@ -44,7 +44,7 @@ final class NewRelicExtensionTest extends TestCase
 						'error',
 					],
 					'rum' => [
-						'enabled' => 'true',
+						'enabled' => true,
 					],
 					'transactionTracer' => [
 						'enabled' => true,

@@ -4,6 +4,9 @@
 	<rule ref="./vendor/ninjify/coding-standard/ruleset-gamee.xml">
 		<exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Classes.SuperfluousTraitNaming.SuperfluousSuffix">
+		<exclude-pattern>/src/RUM/RUMControlTrait.php</exclude-pattern>
+	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
 		<exclude-pattern>/src/Tracy/Logger.php</exclude-pattern>
 	</rule>

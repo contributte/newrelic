@@ -23,19 +23,13 @@ class FooterControl extends Control
 	/**
 	 * @var bool
 	 */
-	private $withScriptTag = true;
+	private $withScriptTag;
 
-	public function __construct(Agent $agent, bool $enabled = true)
+	public function __construct(Agent $agent, bool $enabled = true, bool $withScriptTag = true)
 	{
 		$this->agent = $agent;
 		$this->enabled = $enabled;
-	}
-
-	public function disableScriptTag(): self
-	{
-		$this->withScriptTag = false;
-
-		return $this;
+		$this->withScriptTag = $withScriptTag;
 	}
 
 	public function render(): void

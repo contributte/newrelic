@@ -12,8 +12,7 @@ use Contributte\NewRelic\Config\ParametersConfig;
 use Contributte\NewRelic\Config\TransactionTracerConfig;
 use Contributte\NewRelic\Environment;
 use Contributte\NewRelic\Formatters\DefaultWebTransactionNameFormatter;
-use Contributte\NewRelic\RUM\FooterControl;
-use Contributte\NewRelic\RUM\HeaderControl;
+use Contributte\NewRelic\RUM\RUMControlFactory;
 use Contributte\NewRelic\Tracy\Logger;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
@@ -217,14 +216,8 @@ class NewRelicExtension extends CompilerExtension
 
 		$rumEnabled = $this->enabled && $config->rum->enabled === true;
 
-		$builder->addDefinition($this->prefix('rum.headerControl'))
-			->setFactory(HeaderControl::class, [
-				'@' . $this->prefix('agent'),
-				$rumEnabled,
-			]);
-
-		$builder->addDefinition($this->prefix('rum.footerControl'))
-			->setFactory(FooterControl::class, [
+		$builder->addDefinition($this->prefix('rum.controlFactory'))
+			->setFactory(RUMControlFactory::class, [
 				'@' . $this->prefix('agent'),
 				$rumEnabled,
 			]);

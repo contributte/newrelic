@@ -112,13 +112,13 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 To your `@layout` template add `newRelicHeader` component before `</head>` tag.
 
-```smarty
+```latte
 {control newRelicHeader}
 ```
 
 To your `@layout` template add `newRelicFooter` compenent before `</body>` tag.
 
-```smarty
+```latte
 {control newRelicFooter}
 ```
 

@@ -18,52 +18,52 @@ composer require contributte/newrelic
 
 Register extension
 
-```yaml
+```neon
 extensions:
-  newrelic: Contributte\NewRelic\DI\NewRelicExtension
+	newrelic: Contributte\NewRelic\DI\NewRelicExtension
 ```
 
 ## Configuration
 
 Basic configuration
 
-```yaml
+```neon
 newrelic:
-  enabled: true # true is default
-  # use false on dev when newrelic extension is not present
-  appName: YourApplicationName # optional, defaults to "PHP Application"
+	enabled: true # true is default
+	# use false on dev when newrelic extension is not present
+	appName: YourApplicationName # optional, defaults to "PHP Application"
 ```
 
 Full configuration with default values
 
-```yaml
+```neon
 newrelic:
-  enabled: true
-  appName: PHP Application
-  license: ''
-  logLevel:
-    - critical
-    - exception
-    - error
-  rum:
-    enabled: auto
-  transactionTracer:
-    enabled: true
-    detail: 1
-    recordSql: obfuscated
-    slowSql: true
-    threshold: apdex_f
-    stackTraceThreshold: 500
-    explainThreshold: 500
-  errorCollector:
-    enabled: true
-    recordDatabaseErrors: true
-  parameters:
-    capture: false
-    ignored: []
-  custom:
-    parameters: []
-    tracers: []
+	enabled: true
+	appName: PHP Application
+	license: ''
+	logLevel:
+		- critical
+		- exception
+		- error
+	rum:
+		enabled: auto
+	transactionTracer:
+		enabled: true
+		detail: 1
+		recordSql: obfuscated
+		slowSql: true
+		threshold: apdex_f
+		stackTraceThreshold: 500
+		explainThreshold: 500
+	errorCollector:
+		enabled: true
+		recordDatabaseErrors: true
+	parameters:
+		capture: false
+		ignored: []
+	custom:
+		parameters: []
+		tracers: []
 ```
 
 ## Realtime User Monitoring
@@ -89,23 +89,23 @@ use Contributte\NewRelic\RUM\RUMControlFactory;
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
 
-    /**
-     * @var RUMControlFactory
-     * @inject
-     */
-    protected $rumControlFactory;
+	/**
+	 * @var RUMControlFactory
+	 * @inject
+	 */
+	protected $rumControlFactory;
 
-    protected function createComponentNewRelicHeader(): HeaderControl
-    {
-        // Adding true avoid adding <script> tags
-        return $this->rumControlFactory->createHeader(true);
-    }
+	protected function createComponentNewRelicHeader(): HeaderControl
+	{
+		// Adding true avoid adding <script> tags
+		return $this->rumControlFactory->createHeader(true);
+	}
 
-    protected function createComponentNewRelicFooter(): FooterControl
-    {
-        // Adding true avoid adding <script> tags
-        return $this->rumControlFactory->createFooter(true);
-    }
+	protected function createComponentNewRelicFooter(): FooterControl
+	{
+		// Adding true avoid adding <script> tags
+		return $this->rumControlFactory->createFooter(true);
+	}
 
 }
 ```
@@ -134,11 +134,11 @@ composer require contributte/console contributte/event-dispatcher
 
 And register them.
 
-```yaml
+```neon
 extensions:
-  events: Contributte\EventDispatcher\DI\EventDispatcherExtension
-  console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
-  newrelic.console: Contributte\NewRelic\DI\NewRelicConsoleExtension
+	events: Contributte\EventDispatcher\DI\EventDispatcherExtension
+	console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	newrelic.console: Contributte\NewRelic\DI\NewRelicConsoleExtension
 ```
 
 ## Agent
@@ -160,20 +160,20 @@ use Contributte\NewRelic\Agent\Agent;
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
 
-    /**
-     * @var Agent
-     * @inject
-     */
-    private $newRelicAgent;
+	/**
+	 * @var Agent
+	 * @inject
+	 */
+	private $newRelicAgent;
 
-    protected function startup(): void
-    {
-        parent::startup();
+	protected function startup(): void
+	{
+		parent::startup();
 
-        if ($this->getUser()->isLoggedIn()) {
-            $this->newRelicAgent->addCustomParameter('userId', $this->getUser()->getId());
-        }
-    }
+		if ($this->getUser()->isLoggedIn()) {
+			$this->newRelicAgent->addCustomParameter('userId', $this->getUser()->getId());
+		}
+	}
 
 }
 ```

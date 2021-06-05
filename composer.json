@@ -1,70 +1,74 @@
 {
-	"name": "contributte/newrelic",
-	"type": "library",
-	"description": "NewRelic PHP agent integration for Nette Framework",
-	"keywords": ["nette", "newrelic", "monitoring"],
-	"homepage": "https://github.com/contributte/newrelic",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Patrik Votoček",
-			"homepage": "http://patrik.votocek.cz"
-		},
-		{
-			"name": "Milan Felix Šulc",
-			"homepage": "https://f3l1x.io"
-		},
-		{
-			"name": "Tomáš Jacík",
-			"homepage": "https://tomasjacik.cz"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/contributte/newrelic/issues"
-	},
-	"require": {
-		"php": ">=7.2",
-		"nette/di": "^3.0",
-		"nette/application": "^3.1",
-		"tracy/tracy": "^2.8"
-	},
-	"require-dev": {
-		"contributte/console": "^0.9.0",
-		"contributte/event-dispatcher": "^0.8.0",
-		"ninjify/coding-standard": "^0.11.2",
-		"ninjify/nunjuck": "^0.3.0",
-		"mockery/mockery": "^1.3",
-		"phpstan/phpstan": "^0.12.38",
-		"phpstan/phpstan-strict-rules": "^0.12.4"
-	},
-	"autoload": {
-		"psr-4": {
-			"Contributte\\NewRelic\\": "src"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"ContributteTests\\NewRelic\\": "tests"
-		}
-	},
-	"scripts": {
-		"tests": "vendor/bin/tester -s -p php -c tests/php.ini tests/Cases",
-		"cs": "vendor/bin/phpcs --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
-		"csfix": "vendor/bin/phpcbf --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
-		"phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src tests --level 7"
-	},
-	"suggest": {
-		"contributte/console": "For a nice formated newrelic logs from console commands",
-		"contributte/event-dispatcher": "For a nice formated newrelic logs from console commands"
-	},
-	"archive": {
-		"exclude": [
-			".gitignore"
-		]
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "9.0-dev"
-		}
-	}
+  "name": "contributte/newrelic",
+  "type": "library",
+  "description": "NewRelic PHP agent integration for Nette Framework",
+  "keywords": [
+    "nette",
+    "newrelic",
+    "monitoring"
+  ],
+  "homepage": "https://github.com/contributte/newrelic",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Patrik Votoček",
+      "homepage": "http://patrik.votocek.cz"
+    },
+    {
+      "name": "Milan Felix Šulc",
+      "homepage": "https://f3l1x.io"
+    },
+    {
+      "name": "Tomáš Jacík",
+      "homepage": "https://tomasjacik.cz"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/contributte/newrelic/issues"
+  },
+  "require": {
+    "php": ">=7.2",
+    "nette/di": "^3.0",
+    "nette/application": "^3.1",
+    "tracy/tracy": "^2.8"
+  },
+  "require-dev": {
+    "contributte/console": "^0.9.0",
+    "contributte/event-dispatcher": "^0.8.0",
+    "ninjify/coding-standard": "^0.11.2",
+    "ninjify/nunjuck": "^0.3.0",
+    "mockery/mockery": "^1.3",
+    "phpstan/phpstan": "^0.12.38",
+    "phpstan/phpstan-strict-rules": "^0.12.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Contributte\\NewRelic\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ContributteTests\\NewRelic\\": "tests"
+    }
+  },
+  "scripts": {
+    "tests": "vendor/bin/tester -s -p php -c tests/php.ini tests/Cases",
+    "cs": "vendor/bin/phpcs --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
+    "csfix": "vendor/bin/phpcbf --standard=tests/phpcs-ruleset.xml --extensions=php,phpt --tab-width=4 -sp src tests",
+    "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon src tests --level 7"
+  },
+  "suggest": {
+    "contributte/console": "For a nice formated newrelic logs from console commands",
+    "contributte/event-dispatcher": "For a nice formated newrelic logs from console commands"
+  },
+  "archive": {
+    "exclude": [
+      ".gitignore"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "9.0-dev"
+    }
+  }
 }

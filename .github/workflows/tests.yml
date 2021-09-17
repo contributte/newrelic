@@ -43,7 +43,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - run: composer install --no-progress --prefer-dist
-      - run: composer tests
+      - run: make tests
       - if: failure()
         run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
         shell: bash
@@ -77,7 +77,49 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
-      - run: composer tests
+      - run: make tests
       - if: failure()
         run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
         shell: bash
+
+  test_coverage:
+    name: Tests with code coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: 7.4
+
+      - name: Add NewRelic APT source
+        run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
+      - name: Add NewRelic APT key
+        run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+      - name: Update APT
+        run: sudo apt-get update
+      - name: Install NewRelic PHP extension
+        run: sudo apt-get -y install newrelic-php5
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
+      - run: make coverage-clover
+      - if: failure()
+        run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
+        shell: bash
+
+      - name: "Coveralls.io"
+        env:
+          CI_NAME: github
+          CI: true
+          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+          php php-coveralls.phar --verbose --config tests/.coveralls.yml

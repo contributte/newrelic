@@ -11,7 +11,7 @@ class DefaultCliTransactionNameFormatter implements CliTransactionNameFormatter
 
 	public function format(Command $command): string
 	{
-		return $command->getName();
+		return $command->getName() ?? 'unknown';
 	}
 
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ContributteTests\NewRelic\Mocks;
 
-use Nette;
+use Nette\DI\CompilerExtension;
 
-final class ApplicationExtension extends Nette\DI\CompilerExtension
+final class ApplicationExtension extends CompilerExtension
 {
 
 	public function loadConfiguration(): void

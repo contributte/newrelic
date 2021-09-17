@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="NewRelic">
-	<description>NewRelic custom coding standard</description>
+<ruleset>
 	<rule ref="./vendor/ninjify/coding-standard/ruleset-gamee.xml">
 		<exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
 	</rule>
@@ -13,4 +12,6 @@
 	<rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable">
 		<exclude-pattern>/src/Environment.php</exclude-pattern>
 	</rule>
+
+	<exclude-pattern>/tests/tmp</exclude-pattern>
 </ruleset>

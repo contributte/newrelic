@@ -1,7 +1,0 @@
-#!/bin/bash
-
-docker run --rm -it \
-    -v $(pwd):/app \
-    --workdir /app \
-    --user $(id -u):$(id -g) \
-    contributte/newrelic:latest composer "$@"

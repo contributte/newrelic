@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Contributte\NewRelic\Events\Listeners;
 
 use Contributte\NewRelic\Agent\Agent;
+use Contributte\NewRelic\Exception\RuntimeException;
 use Contributte\NewRelic\Formatters\CliTransactionNameFormatter;
 use Symfony\Component\Console;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,6 +31,10 @@ final class ConsoleListener implements EventSubscriberInterface
 
 	public function onCommand(Console\Event\ConsoleCommandEvent $event): void
 	{
+		if ($event->getCommand() === null) {
+			throw new RuntimeException('Command is required');
+		}
+
 		$this->agent->backgroundJob();
 		$this->agent->nameTransaction($this->formatter->format($event->getCommand()));
 		$this->agent->disableAutorum();

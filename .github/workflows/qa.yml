@@ -12,8 +12,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: 7.4
           coverage: none
+          tools: "composer:2,cs2pr"
 
       - name: Add NewRelic APT source
         run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
@@ -36,5 +37,5 @@ jobs:
             ${{ runner.os }}-composer-
 
       - run: composer update --no-progress --prefer-dist --prefer-stable
-      - run: composer cs
-      - run: composer phpstan
+      - run: make cs
+      - run: make phpstan

@@ -6,3 +6,6 @@ parameters:
 		- '#Method Contributte\\NewRelic\\Agent\\.*Agent::.+ has parameter .+ with no value type specified in iterable type array#'
 		- '#Method Contributte\\NewRelic\\Agent\\.*Agent::.+ return type has no value type specified in iterable type array#'
 		- '#Parameter \#1 \$unused_1 of function newrelic_notice_error expects string, int given#'
+		- '#Parameter \#2 \$exception of function newrelic_notice_error expects Throwable, Throwable\|null given.#'
+		- '#Parameter \#3 \$unused_2 of function newrelic_notice_error expects string, string\|null given.#'
+		- '#Parameter \#4 \$unused_3 of function newrelic_notice_error expects int, int\|null given.#'

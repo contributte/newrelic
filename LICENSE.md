@@ -1,6 +1,7 @@
 The MIT License (MIT)
 =====================
 
+Copyright © 2020 Contributte
 Copyright © 2014 Patrik Votoček, http://patrik.votocek.cz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -28,7 +28,7 @@ final class OnRequestCallbackTest extends TestCase
 		$agent = Mockery::mock(Agent::class)
 			->shouldReceive('backgroundJob')
 			->shouldReceive('nameTransaction')
-				->with('TransactionName')
+			->with('TransactionName')
 			->shouldReceive('disableAutorum')
 			->getMock();
 

@@ -41,7 +41,9 @@ class Logger implements ILogger
 	{
 		$this->agent = $agent;
 		$this->oldLogger = $logger;
-		$this->logLevels = $logLevels ?? $this->defaultLogLevels;
+		$this->logLevels = $logLevels !== []
+			? $logLevels
+			: $this->defaultLogLevels;
 	}
 
 	/**

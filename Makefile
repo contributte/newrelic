@@ -16,7 +16,7 @@ csf:
 	vendor/bin/phpcbf --standard=ruleset.xml --extensions=php,phpt --tab-width=4 -sp --colors src tests
 
 phpstan:
-	vendor/bin/phpstan analyse -l max -c phpstan.neon src
+	vendor/bin/phpstan analyse -l 8 -c phpstan.neon src
 
 tests:
 	vendor/bin/tester -s -p php --colors 1 -C tests/Cases

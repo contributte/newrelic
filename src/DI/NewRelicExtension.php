@@ -221,7 +221,7 @@ class NewRelicExtension extends CompilerExtension
 		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
-		$rumEnabled = $this->enabled && $config->rum->enabled === true;
+		$rumEnabled = $this->enabled && $config->rum->enabled === 'auto';
 
 		$builder->addDefinition($this->prefix('rum.user'))
 			->setFactory(User::class, [$rumEnabled]);

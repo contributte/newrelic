@@ -1,5 +1,5 @@
 {
-	"name": "contributte/newrelic",
+	"name": "thomasdv/newrelic",
 	"type": "library",
 	"description": "NewRelic PHP agent integration for Nette Framework",
 	"keywords": ["nette", "newrelic", "monitoring"],

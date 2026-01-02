@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\RUM;
 
@@ -9,15 +7,9 @@ use Contributte\NewRelic\Agent\Agent;
 final class RUMControlFactory
 {
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
-	/**
-	 * @var bool
-	 */
-	private $enabled;
+	private bool $enabled;
 
 	public function __construct(Agent $agent, bool $enabled = true)
 	{

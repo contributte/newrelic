@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Config;
 
@@ -9,40 +7,19 @@ use Nette\PhpGenerator\Method;
 final class TransactionTracerConfig
 {
 
-	/**
-	 * @var bool
-	 */
-	public $enabled = true;
+	public bool $enabled = true;
 
-	/**
-	 * @var int
-	 */
-	public $detail = 1;
+	public int $detail = 1;
 
-	/**
-	 * @var string
-	 */
-	public $recordSql = 'obfuscated';
+	public string $recordSql = 'obfuscated';
 
-	/**
-	 * @var bool
-	 */
-	public $slowSql = true;
+	public bool $slowSql = true;
 
-	/**
-	 * @var string
-	 */
-	public $threshold = 'apdex_f';
+	public string $threshold = 'apdex_f';
 
-	/**
-	 * @var int
-	 */
-	public $stackTraceThreshold = 500;
+	public int $stackTraceThreshold = 500;
 
-	/**
-	 * @var int
-	 */
-	public $explainThreshold = 500;
+	public int $explainThreshold = 500;
 
 	public function addInitCode(Method $method): void
 	{

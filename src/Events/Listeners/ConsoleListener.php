@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Events\Listeners;
 
@@ -13,20 +11,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class ConsoleListener implements EventSubscriberInterface
 {
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
-	/**
-	 * @var CliTransactionNameFormatter
-	 */
-	private $formatter;
+	private CliTransactionNameFormatter $formatter;
 
 	public function __construct(Agent $agent, CliTransactionNameFormatter $formatter)
 	{
 		$this->agent = $agent;
 		$this->formatter = $formatter;
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	public static function getSubscribedEvents(): array
+	{
+		return [
+			Console\ConsoleEvents::COMMAND => 'onCommand',
+			Console\ConsoleEvents::ERROR => 'onError',
+		];
 	}
 
 	public function onCommand(Console\Event\ConsoleCommandEvent $event): void
@@ -43,17 +46,6 @@ final class ConsoleListener implements EventSubscriberInterface
 	public function onError(Console\Event\ConsoleErrorEvent $event): void
 	{
 		$this->agent->noticeError($event->getError()->getMessage(), $event->getError());
-	}
-
-	/**
-	 * @return array<string, string>
-	 */
-	public static function getSubscribedEvents(): array
-	{
-		return [
-			Console\ConsoleEvents::COMMAND => 'onCommand',
-			Console\ConsoleEvents::ERROR => 'onError',
-		];
 	}
 
 }

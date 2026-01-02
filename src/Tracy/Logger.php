@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Tracy;
 
@@ -10,29 +8,19 @@ use Tracy\ILogger;
 class Logger implements ILogger
 {
 
-	/**
-	 * @var string[]
-	 */
-	private $defaultLogLevels = [
+	/** @var string[] */
+	private array $defaultLogLevels = [
 		ILogger::CRITICAL,
 		ILogger::EXCEPTION,
 		ILogger::ERROR,
 	];
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
-	/**
-	 * @var ILogger
-	 */
-	private $oldLogger;
+	private ILogger $oldLogger;
 
-	/**
-	 * @var string[]
-	 */
-	private $logLevels;
+	/** @var string[] */
+	private array $logLevels;
 
 	/**
 	 * @param string[] $logLevels
@@ -47,11 +35,9 @@ class Logger implements ILogger
 	}
 
 	/**
-	 * @param mixed $message
-	 * @param mixed $priority
 	 * @return string logged error filename
 	 */
-	public function log($message, $priority = null)
+	public function log(mixed $message, mixed $priority = null)
 	{
 		$exceptionFile = $this->oldLogger->log($message, $priority);
 

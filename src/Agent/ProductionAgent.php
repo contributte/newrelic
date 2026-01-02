@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Agent;
 
@@ -10,10 +8,7 @@ namespace Contributte\NewRelic\Agent;
 final class ProductionAgent implements Agent
 {
 
-	/**
-	 * @var bool
-	 */
-	private $enabled;
+	private bool $enabled;
 
 	public function __construct(bool $enabled)
 	{
@@ -33,7 +28,7 @@ final class ProductionAgent implements Agent
 	public function acceptDistributedTraceHeaders(array $headers, string $transportType): bool
 	{
 		return $this->enabled
-			? newrelic_accept_distributed_trace_headers ($headers, $transportType)
+			? newrelic_accept_distributed_trace_headers($headers, $transportType)
 			: false;
 	}
 
@@ -53,10 +48,8 @@ final class ProductionAgent implements Agent
 	 * Attaches a custom attribute (key/value pair) to the current transaction and the current span (if enabled).
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_parameter
-	 *
-	 * @param bool|float|int|string $value
 	 */
-	public function addCustomParameter(string $key, $value): bool
+	public function addCustomParameter(string $key, bool|float|int|string $value): bool
 	{
 		return $this->enabled
 			? newrelic_add_custom_parameter($key, $value)
@@ -67,10 +60,8 @@ final class ProductionAgent implements Agent
 	 * Attaches a custom attribute (key/value pair) to the current span.
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelicaddcustomspanparameter-php-agent-api
-	 *
-	 * @param bool|float|int|string $value
 	 */
-	public function addCustomSpanParameter(string $key, $value): bool
+	public function addCustomSpanParameter(string $key, bool|float|int|string $value): bool
 	{
 		return $this->enabled
 			? newrelic_add_custom_span_parameter($key, $value)
@@ -268,7 +259,8 @@ final class ProductionAgent implements Agent
 		?string $errfile = null,
 		?int $errline = null,
 		?string $errcontext = null
-	): void {
+	): void
+	{
 		newrelic_notice_error($errno, $errstr, $errfile, $errline, $errcontext);
 	}
 
@@ -286,10 +278,8 @@ final class ProductionAgent implements Agent
 	 * Records a datastore segment.
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_record_datastore_segment
-	 *
-	 * @return mixed
 	 */
-	public function recordDatastoreSegment(callable $func, array $parameters)
+	public function recordDatastoreSegment(callable $func, array $parameters): mixed
 	{
 		return $this->enabled
 			? newrelic_record_datastore_segment($func, $parameters)

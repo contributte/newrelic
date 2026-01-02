@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Callbacks;
 
@@ -11,20 +9,14 @@ use Nette\Application\BadRequestException;
 class OnErrorCallback
 {
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
 	public function __construct(Agent $agent)
 	{
 		$this->agent = $agent;
 	}
 
-	/**
-	 * @param \Exception|\Throwable $e
-	 */
-	public function __invoke(Application $application, $e): void
+	public function __invoke(Application $application, \Throwable|\Throwable $e): void
 	{
 		if ($e instanceof BadRequestException) {
 			// skip 4xx errors

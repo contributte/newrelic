@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\DI;
 
@@ -26,20 +24,11 @@ use Tracy\ILogger;
 class NewRelicExtension extends CompilerExtension
 {
 
-	/**
-	 * @var bool
-	 */
-	private $skipIfIsDisabled;
+	private bool $skipIfIsDisabled;
 
-	/**
-	 * @var bool
-	 */
-	private $enabled = true;
+	private bool $enabled = true;
 
-	/**
-	 * @param bool $skipIfIsDisabled
-	 */
-	public function __construct($skipIfIsDisabled = false)
+	public function __construct(bool $skipIfIsDisabled = false)
 	{
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
 	}
@@ -59,9 +48,9 @@ class NewRelicExtension extends CompilerExtension
 				'enabled' => Expect::anyOf('auto', true, false)->default('auto'),
 			]),
 			'transactionNameFormatter' => Expect::string(DefaultWebTransactionNameFormatter::class),
-			'transactionTracer' => Expect::from(new TransactionTracerConfig),
-			'errorCollector' => Expect::from(new ErrorCollectorConfig),
-			'parameters' => Expect::from(new ParametersConfig),
+			'transactionTracer' => Expect::from(new TransactionTracerConfig()),
+			'errorCollector' => Expect::from(new ErrorCollectorConfig()),
+			'parameters' => Expect::from(new ParametersConfig()),
 			'custom' => Expect::structure([
 				'parameters' => Expect::array(),
 				'tracers' => Expect::array(),

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Callbacks;
 
@@ -13,20 +11,11 @@ use Nette\Application\Request;
 class OnRequestCallback
 {
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
-	/**
-	 * @var Environment
-	 */
-	private $environment;
+	private Environment $environment;
 
-	/**
-	 * @var WebTransactionNameFormatter
-	 */
-	private $formatter;
+	private WebTransactionNameFormatter $formatter;
 
 	public function __construct(Agent $agent, Environment $environment, WebTransactionNameFormatter $formatter)
 	{

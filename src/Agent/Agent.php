@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Agent;
 
@@ -29,19 +27,15 @@ interface Agent
 	 * Attaches a custom attribute (key/value pair) to the current transaction and the current span (if enabled).
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_parameter
-	 *
-	 * @param bool|float|int|string $value
 	 */
-	public function addCustomParameter(string $key, $value): bool;
+	public function addCustomParameter(string $key, bool|float|int|string $value): bool;
 
 	/**
 	 * Attaches a custom attribute (key/value pair) to the current span.
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelicaddcustomspanparameter-php-agent-api
-	 *
-	 * @param bool|float|int|string $value
 	 */
-	public function addCustomSpanParameter(string $key, $value): bool;
+	public function addCustomSpanParameter(string $key, bool|float|int|string $value): bool;
 
 	/**
 	 * Specify functions or methods for the agent to instrument with custom instrumentation.
@@ -181,10 +175,8 @@ interface Agent
 	 * Records a datastore segment.
 	 *
 	 * @link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_record_datastore_segment
-	 *
-	 * @return mixed
 	 */
-	public function recordDatastoreSegment(callable $func, array $parameters);
+	public function recordDatastoreSegment(callable $func, array $parameters): mixed;
 
 	/**
 	 * Sets the New Relic app name, which controls data rollup.

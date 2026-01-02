@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Config;
 
@@ -9,15 +7,10 @@ use Nette\PhpGenerator\Method;
 final class ParametersConfig
 {
 
-	/**
-	 * @var bool
-	 */
-	public $capture = false;
+	public bool $capture = false;
 
-	/**
-	 * @var string[]
-	 */
-	public $ignored = [];
+	/** @var string[] */
+	public array $ignored = [];
 
 	public function addInitCode(Method $method): void
 	{

@@ -1,34 +1,34 @@
-.PHONY: install qa cs csf phpstan tests coverage-clover coverage-html
-
+.PHONY: install
 install:
 	composer update
 
+.PHONY: qa
 qa: phpstan cs
 
+.PHONY: cs
 cs:
 ifdef GITHUB_ACTION
-	vendor/bin/phpcs --standard=ruleset.xml --report=checkstyle --extensions=php,phpt --tab-width=4 -spq --colors src tests | cs2pr
+	vendor/bin/phpcs --standard=ruleset.xml --extensions="php,phpt" --tab-width=4 --report=checkstyle -spq --colors src tests | cs2pr
 else
-	vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --tab-width=4 -sp --colors src tests
+	vendor/bin/phpcs --standard=ruleset.xml --extensions="php,phpt" --tab-width=4 -sp --colors src tests
 endif
 
+.PHONY: csf
 csf:
-	vendor/bin/phpcbf --standard=ruleset.xml --extensions=php,phpt --tab-width=4 -sp --colors src tests
+	vendor/bin/phpcbf --standard=ruleset.xml --extensions="php,phpt" --tab-width=4 -sp --colors src tests
 
+.PHONY: phpstan
 phpstan:
-	vendor/bin/phpstan analyse -l 8 -c phpstan.neon src
+	vendor/bin/phpstan analyse -c phpstan.neon
 
+.PHONY: tests
 tests:
 	vendor/bin/tester -s -p php --colors 1 -C tests/Cases
 
-coverage-clover:
+.PHONY: coverage
+coverage:
+ifdef GITHUB_ACTION
 	vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.xml --coverage-src ./src tests/Cases
-
-coverage-html:
+else
 	vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.html --coverage-src ./src tests/Cases
-
-build:
-	docker build -t xnewrelic -f .docker/Dockerfile .
-
-dev: build
-	docker run -it --rm -v $(CURDIR):/srv xnewrelic bash
+endif

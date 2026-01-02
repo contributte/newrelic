@@ -1,125 +1,88 @@
-name: Tests
+name: "Tests"
 
 on:
-  - push
-  - pull_request
+  pull_request:
+  workflow_dispatch:
+
+  push:
+    branches: ["*"]
+
+  schedule:
+    - cron: "0 10 * * 1"
 
 jobs:
   tests:
+    name: "Tests"
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php:
-          - 7.2
-          - 7.3
-          - 7.4
+          - "8.2"
+          - "8.3"
+          - "8.4"
+          - "8.5"
 
       fail-fast: false
 
-    name: PHP ${{ matrix.php }} tests
     steps:
-      - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@master
+
+      - uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php }}
           coverage: none
+          tools: composer:v2
 
       - name: Add NewRelic APT source
         run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
+
       - name: Add NewRelic APT key
         run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+
       - name: Update APT
         run: sudo apt-get update
+
       - name: Install NewRelic PHP extension
         run: sudo apt-get -y install newrelic-php5
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable
 
-      - run: composer install --no-progress --prefer-dist
       - run: make tests
+
       - if: failure()
         run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
         shell: bash
 
-  lowest_dependencies:
-    name: Lowest Dependencies
+  tests-lowest:
+    name: "Tests Lowest"
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@master
+
+      - uses: shivammathur/setup-php@master
         with:
-          php-version: 7.2
+          php-version: "8.2"
           coverage: none
+          tools: composer:v2
 
       - name: Add NewRelic APT source
         run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
+
       - name: Add NewRelic APT key
         run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+
       - name: Update APT
         run: sudo apt-get update
+
       - name: Install NewRelic PHP extension
         run: sudo apt-get -y install newrelic-php5
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable --prefer-lowest
 
-      - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
       - run: make tests
+
       - if: failure()
         run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
         shell: bash
-
-  test_coverage:
-    name: Tests with code coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-
-      - name: Add NewRelic APT source
-        run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
-      - name: Add NewRelic APT key
-        run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
-      - name: Update APT
-        run: sudo apt-get update
-      - name: Install NewRelic PHP extension
-        run: sudo apt-get -y install newrelic-php5
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - run: composer update --no-progress --prefer-dist --prefer-lowest --prefer-stable
-      - run: make coverage-clover
-      - if: failure()
-        run: for i in $(find tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
-        shell: bash
-
-      - name: "Coveralls.io"
-        env:
-          CI_NAME: github
-          CI: true
-          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        run: |
-          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-          php php-coveralls.phar --verbose --config tests/.coveralls.yml

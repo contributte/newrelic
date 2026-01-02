@@ -1,16 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\RUM;
 
 trait RUMControlTrait
 {
 
-	/**
-	 * @var RUMControlFactory
-	 */
-	protected $rumControlFactory;
+	protected RUMControlFactory $rumControlFactory;
 
 	public function injectRUMControlFactory(RUMControlFactory $rumControlFactory): void
 	{

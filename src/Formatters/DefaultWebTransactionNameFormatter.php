@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Formatters;
 
@@ -11,10 +9,7 @@ use Nette\Application\UI\Presenter;
 final class DefaultWebTransactionNameFormatter implements WebTransactionNameFormatter
 {
 
-	/**
-	 * @var Environment
-	 */
-	private $environment;
+	private Environment $environment;
 
 	public function __construct(Environment $environment)
 	{
@@ -25,7 +20,7 @@ final class DefaultWebTransactionNameFormatter implements WebTransactionNameForm
 	{
 		$presenter = $request->getPresenterName();
 		$params = $request->getParameters();
-		$action = $params[Presenter::ACTION_KEY] ?? Presenter::DEFAULT_ACTION;
+		$action = $params[Presenter::ActionKey] ?? Presenter::DefaultAction;
 
 		return sprintf('%s:%s', $presenter, $action);
 	}

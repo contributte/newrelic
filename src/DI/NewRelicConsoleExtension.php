@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\DI;
 
@@ -16,15 +14,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class NewRelicConsoleExtension extends CompilerExtension
 {
 
-	/**
-	 * @var bool
-	 */
-	private $skipIfIsDisabled;
+	private bool $skipIfIsDisabled;
 
-	/**
-	 * @param bool $skipIfIsDisabled
-	 */
-	public function __construct($skipIfIsDisabled = false)
+	public function __construct(bool $skipIfIsDisabled = false)
 	{
 		$this->skipIfIsDisabled = $skipIfIsDisabled;
 	}

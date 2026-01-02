@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\Config;
 
@@ -9,15 +7,9 @@ use Nette\PhpGenerator\Method;
 final class ErrorCollectorConfig
 {
 
-	/**
-	 * @var bool
-	 */
-	public $enabled = true;
+	public bool $enabled = true;
 
-	/**
-	 * @var bool
-	 */
-	public $recordDatabaseErrors = true;
+	public bool $recordDatabaseErrors = true;
 
 	public function addInitCode(Method $method): void
 	{

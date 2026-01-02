@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\NewRelic\RUM;
 
@@ -10,20 +8,11 @@ use Nette\Application\UI\Control;
 class HeaderControl extends Control
 {
 
-	/**
-	 * @var Agent
-	 */
-	private $agent;
+	private Agent $agent;
 
-	/**
-	 * @var bool
-	 */
-	private $enabled;
+	private bool $enabled;
 
-	/**
-	 * @var bool
-	 */
-	private $withScriptTag;
+	private bool $withScriptTag;
 
 	public function __construct(Agent $agent, bool $enabled = true, bool $withScriptTag = true)
 	{

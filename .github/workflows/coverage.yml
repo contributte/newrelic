@@ -1,4 +1,4 @@
-name: "QA"
+name: "Coverage"
 
 on:
   pull_request:
@@ -8,11 +8,11 @@ on:
     branches: ["*"]
 
   schedule:
-    - cron: "0 10 * * 1"
+    - cron: "0 9 * * 1"
 
 jobs:
-  qa:
-    name: "Quality Assurance"
+  coverage:
+    name: "Coverage"
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,8 @@ jobs:
       - uses: shivammathur/setup-php@master
         with:
           php-version: "8.2"
-          coverage: none
-          tools: composer:v2, cs2pr
+          coverage: pcov
+          tools: composer:v2
 
       - name: Add NewRelic APT source
         run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
@@ -38,4 +38,4 @@ jobs:
 
       - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable
 
-      - run: make qa
+      - run: make coverage

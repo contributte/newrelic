@@ -1,20 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
-declare(strict_types=1);
-
-namespace ContributteTests\NewRelic\Mocks;
+namespace Tests\Mocks;
 
 final class Application
 {
 
-	/**
-	 * @var callable[]
-	 */
-	public $onRequest = [];
+	/** @var callable[] */
+	public array $onRequest = [];
 
-	/**
-	 * @var callable[]
-	 */
-	public $onError = [];
+	/** @var callable[] */
+	public array $onError = [];
 
 }

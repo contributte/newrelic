@@ -1,12 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
-declare(strict_types=1);
-
-namespace ContributteTests\NewRelic\Cases\Formatters;
+namespace Tests\Cases\Formatters;
 
 use Contributte\NewRelic\Environment;
 use Contributte\NewRelic\Formatters\DefaultWebTransactionNameFormatter;
-use ContributteTests\NewRelic\Libs\TestCase;
+use Contributte\Tester\Toolkit;
 use Mockery;
 use Nette\Application\Request;
 use Nette\Application\UI\Presenter;
@@ -14,50 +12,43 @@ use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-/**
- * @TestCase
- */
-final class DefaultWebTransactionNameFormatterTest extends TestCase
-{
+Toolkit::test(function (): void {
+	$environment = Mockery::mock(Environment::class);
+	$request = new Request('MyPresenter', 'GET', [
+		Presenter::ActionKey => 'myAction',
+	]);
 
-	public function testFormatWithCustomAction(): void
-	{
-		$environment = Mockery::mock(Environment::class);
-		$request = new Request('MyPresenter', 'GET', [
-			Presenter::ACTION_KEY => 'myAction',
-		]);
+	$formatter = new DefaultWebTransactionNameFormatter($environment);
 
-		$formatter = new DefaultWebTransactionNameFormatter($environment);
+	Assert::same('MyPresenter:myAction', $formatter->format($request));
 
-		Assert::same('MyPresenter:myAction', $formatter->format($request));
-	}
+	Mockery::close();
+});
 
-	public function testFormatWithDefaultAction(): void
-	{
-		$environment = Mockery::mock(Environment::class);
-		$request = new Request('MyPresenter', 'GET');
+Toolkit::test(function (): void {
+	$environment = Mockery::mock(Environment::class);
+	$request = new Request('MyPresenter', 'GET');
 
-		$formatter = new DefaultWebTransactionNameFormatter($environment);
+	$formatter = new DefaultWebTransactionNameFormatter($environment);
 
-		Assert::same('MyPresenter:' . Presenter::DEFAULT_ACTION, $formatter->format($request));
-	}
+	Assert::same('MyPresenter:' . Presenter::DefaultAction, $formatter->format($request));
 
-	public function testFormatArgv(): void
-	{
-		$environment = Mockery::mock(Environment::class)
-			->shouldReceive('getArgv')
-			->andReturn([
-				'./consoleCommand',
-				'--param1',
-				'--param2',
-			])
-			->getMock();
+	Mockery::close();
+});
 
-		$formatter = new DefaultWebTransactionNameFormatter($environment);
+Toolkit::test(function (): void {
+	$environment = Mockery::mock(Environment::class)
+		->shouldReceive('getArgv')
+		->andReturn([
+			'./consoleCommand',
+			'--param1',
+			'--param2',
+		])
+		->getMock();
 
-		Assert::same('consoleCommand --param1 --param2', $formatter->formatArgv());
-	}
+	$formatter = new DefaultWebTransactionNameFormatter($environment);
 
-}
+	Assert::same('consoleCommand --param1 --param2', $formatter->formatArgv());
 
-(new DefaultWebTransactionNameFormatterTest())->run();
+	Mockery::close();
+});

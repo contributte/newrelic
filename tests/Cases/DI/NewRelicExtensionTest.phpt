@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types = 1);
 
-declare(strict_types=1);
-
-namespace ContributteTests\NewRelic\Cases\DI;
+namespace Tests\Cases\DI;
 
 use Contributte\NewRelic\Agent\ProductionAgent;
 use Contributte\NewRelic\Callbacks\OnErrorCallback;
@@ -13,82 +11,75 @@ use Contributte\NewRelic\RUM\FooterControl;
 use Contributte\NewRelic\RUM\HeaderControl;
 use Contributte\NewRelic\RUM\RUMControlFactory;
 use Contributte\NewRelic\Tracy\Logger;
-use ContributteTests\NewRelic\Libs\TestCase;
-use ContributteTests\NewRelic\Mocks\ApplicationExtension;
+use Contributte\Tester\Environment;
+use Contributte\Tester\Toolkit;
+use Mockery;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
 use Tester\Assert;
+use Tests\Mocks\ApplicationExtension;
 use Tracy\Bridges\Nette\TracyExtension;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-/**
- * @TestCase
- */
-final class NewRelicExtensionTest extends TestCase
-{
-
-	public function testExtension(): void
-	{
-		$loader = new ContainerLoader(TEMP_DIR, true);
-		$class = $loader->load(function (Compiler $compiler): void {
-			$compiler->addConfig([
-				'newrelic' => [
-					'enabled' => true,
-					'appName' => 'YourApplicationName',
-					'license' => 'yourLicenseCode',
-					'logLevel' => [
-						'critical',
-						'exception',
-						'error',
-					],
-					'rum' => [
-						'enabled' => true,
-					],
-					'transactionTracer' => [
-						'enabled' => true,
-						'detail' => 1,
-						'recordSql' => 'obfuscated',
-						'slowSql' => true,
-						'threshold' => 'apdex_f',
-						'stackTraceThreshold' => 500,
-						'explainThreshold' => 500,
-					],
-					'errorCollector' => [
-						'enabled' => true,
-						'recordDatabaseErrors' => true,
-					],
-					'parameters' => [
-						'capture' => false,
-						'ignored' => [],
-					],
-					'custom' => [
-						'parameters' => [
-							'paramName' => 'paramValue',
-						],
-						'tracers' => [],
-					],
+Toolkit::test(function (): void {
+	$loader = new ContainerLoader(Environment::getTestDir(), true);
+	$class = $loader->load(function (Compiler $compiler): void {
+		$compiler->addConfig([
+			'newrelic' => [
+				'enabled' => true,
+				'appName' => 'YourApplicationName',
+				'license' => 'yourLicenseCode',
+				'logLevel' => [
+					'critical',
+					'exception',
+					'error',
 				],
-			]);
-			$compiler->addExtension('application', new ApplicationExtension);
-			$compiler->addExtension('tracy', new TracyExtension);
-			$compiler->addExtension('newrelic', new NewRelicExtension);
-			$compiler->addExtension('newrelic.console', new NewRelicConsoleExtension);
-		}, [getmypid(), 1]);
+				'rum' => [
+					'enabled' => true,
+				],
+				'transactionTracer' => [
+					'enabled' => true,
+					'detail' => 1,
+					'recordSql' => 'obfuscated',
+					'slowSql' => true,
+					'threshold' => 'apdex_f',
+					'stackTraceThreshold' => 500,
+					'explainThreshold' => 500,
+				],
+				'errorCollector' => [
+					'enabled' => true,
+					'recordDatabaseErrors' => true,
+				],
+				'parameters' => [
+					'capture' => false,
+					'ignored' => [],
+				],
+				'custom' => [
+					'parameters' => [
+						'paramName' => 'paramValue',
+					],
+					'tracers' => [],
+				],
+			],
+		]);
+		$compiler->addExtension('application', new ApplicationExtension());
+		$compiler->addExtension('tracy', new TracyExtension());
+		$compiler->addExtension('newrelic', new NewRelicExtension());
+		$compiler->addExtension('newrelic.console', new NewRelicConsoleExtension());
+	}, [getmypid(), 1]);
 
-		/** @var Container $container */
-		$container = new $class();
+	/** @var Container $container */
+	$container = new $class();
 
-		Assert::type(ProductionAgent::class, $container->getService('newrelic.agent'));
-		Assert::type(Logger::class, $container->getService('newrelic.logger'));
-		Assert::type(OnRequestCallback::class, $container->getService('newrelic.onRequestCallback'));
-		Assert::type(OnErrorCallback::class, $container->getService('newrelic.onErrorCallback'));
-		Assert::type(RUMControlFactory::class, $container->getService('newrelic.rum.controlFactory'));
-		Assert::type(HeaderControl::class, $container->getService('newrelic.rum.controlFactory')->createHeader());
-		Assert::type(FooterControl::class, $container->getService('newrelic.rum.controlFactory')->createFooter());
-	}
+	Assert::type(ProductionAgent::class, $container->getService('newrelic.agent'));
+	Assert::type(Logger::class, $container->getService('newrelic.logger'));
+	Assert::type(OnRequestCallback::class, $container->getService('newrelic.onRequestCallback'));
+	Assert::type(OnErrorCallback::class, $container->getService('newrelic.onErrorCallback'));
+	Assert::type(RUMControlFactory::class, $container->getService('newrelic.rum.controlFactory'));
+	Assert::type(HeaderControl::class, $container->getService('newrelic.rum.controlFactory')->createHeader());
+	Assert::type(FooterControl::class, $container->getService('newrelic.rum.controlFactory')->createFooter());
 
-}
-
-(new NewRelicExtensionTest())->run();
+	Mockery::close();
+});

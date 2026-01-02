@@ -6,5 +6,8 @@
 /composer.lock
 
 # Tests
-/temp
-/coverage.xml
+/tests/tmp
+/coverage.*
+*.actual
+*.expected
+*.log

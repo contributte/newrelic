@@ -23,8 +23,7 @@ jobs:
           php-version: "8.2"
           coverage: none
           tools: composer:v2, cs2pr
-          extensions: newrelic
 
-      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable
+      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable --ignore-platform-req=ext-newrelic
 
       - run: make qa

@@ -23,8 +23,7 @@ jobs:
           php-version: "8.2"
           coverage: pcov
           tools: composer:v2
-          extensions: newrelic
 
-      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable
+      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable --ignore-platform-req=ext-newrelic
 
       - run: make coverage

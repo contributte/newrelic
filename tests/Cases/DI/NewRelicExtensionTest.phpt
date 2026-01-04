@@ -23,6 +23,10 @@ use Tracy\Bridges\Nette\TracyExtension;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
+if (!extension_loaded('newrelic')) {
+	Environment::skip('NewRelic extension is required');
+}
+
 Toolkit::test(function (): void {
 	$loader = new ContainerLoader(Environment::getTestDir(), true);
 	$class = $loader->load(function (Compiler $compiler): void {

@@ -33,18 +33,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           tools: composer:v2
-
-      - name: Add NewRelic APT source
-        run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
-
-      - name: Add NewRelic APT key
-        run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
-
-      - name: Update APT
-        run: sudo apt-get update
-
-      - name: Install NewRelic PHP extension
-        run: sudo apt-get -y install newrelic-php5
+          extensions: newrelic
 
       - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable
 
@@ -66,18 +55,7 @@ jobs:
           php-version: "8.2"
           coverage: none
           tools: composer:v2
-
-      - name: Add NewRelic APT source
-        run: echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
-
-      - name: Add NewRelic APT key
-        run: wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
-
-      - name: Update APT
-        run: sudo apt-get update
-
-      - name: Install NewRelic PHP extension
-        run: sudo apt-get -y install newrelic-php5
+          extensions: newrelic
 
       - run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable --prefer-lowest
 

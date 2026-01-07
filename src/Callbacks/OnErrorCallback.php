@@ -16,7 +16,7 @@ class OnErrorCallback
 		$this->agent = $agent;
 	}
 
-	public function __invoke(Application $application, \Throwable|\Throwable $e): void
+	public function __invoke(Application $application, \Throwable $e): void
 	{
 		if ($e instanceof BadRequestException) {
 			// skip 4xx errors

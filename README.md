@@ -102,7 +102,7 @@ string when calling `getBrowserTimingHeader()` and `getBrowserTimingFooter()` fu
 
 To specify where these JS should be added, you can either add `RUMControlTrait` to your
 `BasePresenter` or create components your own way if you want to avoid adding `<script>` tags.
-If `rum/enabled` is se to `false`, these controls returns empty string.
+If `rum/enabled` is set to `false`, these controls return empty string.
 
 ```php
 <?php
@@ -143,7 +143,7 @@ To your `@layout` template add `newRelicHeader` component before `</head>` tag.
 {control newRelicHeader}
 ```
 
-To your `@layout` template add `newRelicFooter` compenent before `</body>` tag.
+To your `@layout` template add `newRelicFooter` component before `</body>` tag.
 
 ```latte
 {control newRelicFooter}
@@ -151,7 +151,7 @@ To your `@layout` template add `newRelicFooter` compenent before `</body>` tag.
 
 ## Console
 
-This step is not necessary, but recommended as it will give you a nice formated data even for console commands.
+This step is not necessary, but recommended as it will give you nicely formatted data even for console commands.
 
 You will need to add [contributte/console](https://github.com/contributte/console) and [contributte/event-dispatcher](https://github.com/contributte/event-dispatcher) packages.
 
@@ -209,7 +209,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 See [how to contribute](https://contributte.org/contributing.html) to this package.
 
-This package is currently maintaining by these authors.
+This package is currently maintained by these authors.
 
 <a href="https://github.com/foxycode">
   <img width="80" height="80" src="https://avatars2.githubusercontent.com/u/1284781?s=80&v=4">

@@ -27,12 +27,12 @@
   },
   "require": {
     "php": ">=8.2",
-    "ext-newrelic": "*",
     "nette/di": "^3.2.0",
     "nette/application": "^3.2.0",
     "tracy/tracy": "^2.10.0"
   },
   "require-dev": {
+    "ext-newrelic": "*",
     "contributte/console": "^0.10.0",
     "contributte/event-dispatcher": "^0.10.0",
     "contributte/phpstan": "^0.1.0",
